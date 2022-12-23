@@ -1,0 +1,9 @@
+tambah menu vaksin
+- per kecamatan
+- jenis vaksin
+- tahap vaksin (ex : 1, 2, booster)
+
+tambah menu stunting
+
+suspek selesai validasi selesai
+probable meninggal di ambil dari probabi rawat dan isoman

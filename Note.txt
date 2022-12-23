@@ -1,0 +1,24 @@
+- Jika tidak wajib perbaikan, langsung approve maka nilai tetap (done)
+- Penambahan counter klik untuk dashboard
+
+10 audit data
+6 nilai (exist good) = 6*1
+2 nilai (not exist good) = 2*-1
+1 nilai (not exist) = 1*0
+1 nilai (N/A) = blank (tidak dihitung)
+total = (6 + -2 + 0) / 700*100
+
+Rumus MOT :
+jumlah nilai item audit/jumlah data
+
+jika salah satu nilai item mandatory tidak terpenuhi maka hasil nya bronze
+
+Rumus persentase :
+jumlah nilai audit/jumlah item*100
+
+Rumus untuk total nilai nos :
+(h1 premises + h1 process + h1 people)/3 
+
+Akses :
+- Buat NOS baru (Admin, PIC NOS (Daerah))
+- Audit (PIC NOS)

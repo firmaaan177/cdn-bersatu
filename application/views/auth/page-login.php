@@ -21,8 +21,8 @@
                 <div class="col-lg-12">
                     <div class="text-center">
                         <a href="<?= base_url(); ?>" class="mb-5 d-block auth-logo">
-                            <img src="<?= base_url(); ?>assets/images/logo.png" alt="" height="40" class="logo logo-dark">
-                            <img src="<?= base_url(); ?>assets/images/logo.png" alt="" height="40" class="logo logo-light">
+                            <img src="<?= base_url(); ?>assets/images/logo.png" alt="" height="50" class="logo logo-dark">
+                            <img src="<?= base_url(); ?>assets/images/logo.png" alt="" height="50" class="logo logo-light">
                         </a>
                     </div>
                 </div>
@@ -67,7 +67,7 @@
                     <div class="mt-5 text-center">
                         <p>© <script>
                                 document.write(new Date().getFullYear())
-                            </script> © <a href="http://trisoft.id/" target="_blank">Trisoft.id</a> - All Rights Reserved</p>
+                            </script> © <a href="http://trisoft.id/" target="_blank">Capella Dinamik Nusantara</a> - All Rights Reserved</p>
                     </div>
 
                 </div>

@@ -177,19 +177,19 @@ if($this->session->userdata('level') == 5){
 			<div class="navbar-brand-box">
 				<a href="#" class="logo logo-dark">
 					<span class="logo-sm">
-						<img src="<?= base_url(); ?>assets/images/logo.png" alt="" height="22">
+						<img src="<?= base_url(); ?>assets/images/logo.png" alt="" height="32">
 					</span>
 					<span class="logo-lg">
-						<img src="<?= base_url(); ?>assets/images/logo.png" alt="" height="25">
+						<img src="<?= base_url(); ?>assets/images/logo.png" alt="" height="35">
 					</span>
 				</a>
 
 				<a href="#" class="logo logo-light">
 					<span class="logo-sm">
-						<img src="<?= base_url(); ?>assets/images/logo-white.png" alt="" height="22">
+						<img src="<?= base_url(); ?>assets/images/logo-white.png" alt="" height="32">
 					</span>
 					<span class="logo-lg">
-						<img src="<?= base_url(); ?>assets/images/logo-white.png" alt="" height="25">
+						<img src="<?= base_url(); ?>assets/images/logo-white.png" alt="" height="35">
 					</span>
 				</a>
 			</div>

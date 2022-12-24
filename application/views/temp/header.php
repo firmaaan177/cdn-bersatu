@@ -96,13 +96,13 @@ if($this->session->userdata('level') == 5){
 				</div>
 
 				<div class="d-flex">
-
+					<?php if(!empty($this->session->userdata('id_dealer'))){ ?>
 					<div class="dropdown d-none d-lg-inline-block ms-1">
-						<button type="button" class="btn header-item noti-icon waves-effect" data-bs-toggle="fullscreen">
-							<i class="uil-minus-path"></i>
+						<button type="button" class="btn header-item noti-icon waves-effect">
+							<i class="uil-map-marker-alt font-size-16"></i>  <span class="d-none d-xl-inline-block ms-1 fw-medium font-size-15"><?= $this->session->userdata('nama_regional') ?></span>
 						</button>
 					</div>
-
+					<?php } ?>
 					<div class="dropdown d-inline-block">
 						<button type="button" class="btn header-item noti-icon waves-effect" id="page-header-notifications-dropdown"
 							data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">

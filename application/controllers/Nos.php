@@ -27,19 +27,25 @@ class Nos extends CI_Controller
         foreach ($list as $field) {
 
             $nos_audit = $this->db->where('id_nos', $field->id_nos)->get('nos_audit')->row_array();
-            $dealer = "<strong>$field->nama_dealer</strong><br><span>Tipe Jaringan : $field->nama_panel</span><br><span>Summited : <span class='text-danger'>Not Approve</span></span>";
+            $dealer = "<strong>$field->nama_dealer</strong><br><span>Tipe Jaringan : $field->nama_panel</span>";
 
             if($nos_audit == 0){
-                $status = '<span class="badge rounded-pill bg-warning" style="font-size:90%">Audit sedang dilakukan</span>';
+                $status = '<span class="badge rounded-pill bg-warning font-size-12">Audit sedang dilakukan</span>';
                 $action = "<a class='dropdown-item' href='".base_url('nos/panel/'.encrypt_url($field->id_nos).'')."'><i class='uil-check-circle mr-1'></i> Audit Sekarang</a>";
             }else{
-                $status = '<span class="badge rounded-pill bg-success" style="font-size:90%">Audit telah dilakukan</span>';
+                $status = '<span class="badge rounded-pill bg-success font-size-12" >Audit telah dilakukan</span>';
                 $action = "<a class='dropdown-item' href='".base_url('nos/panel/'.encrypt_url($field->id_nos).'')."'><i class='uil-check-circle mr-1'></i> Audit Sekarang</a>";
 
             }
 
-            if($field->hasil_sebelumnya = 80){
-                $target = ''.$field->hasil_sebelumnya.'% <br><span class="badge rounded-pill bg-warning" style="font-size:90%">Gold</span>';
+            if($field->hasil_sebelumnya >= 0 && $field->hasil_sebelumnya <= 50){
+                $target = '<strong>'.$field->hasil_sebelumnya.'%</strong> <br><span class="badge rounded-pill bg-bronze font-size-12" >Bronze</span>';
+            }else if($field->hasil_sebelumnya >= 51 && $field->hasil_sebelumnya <= 79){
+                $target = '<strong>'.$field->hasil_sebelumnya.'%</strong> <br><span class="badge rounded-pill bg-silver font-size-12" >Silver</span>';
+            }else if($field->hasil_sebelumnya >= 80 && $field->hasil_sebelumnya <= 90){
+                $target = '<strong>'.$field->hasil_sebelumnya.'%</strong> <br><span class="badge rounded-pill bg-gold font-size-12" >Gold</span>';
+            }else if($field->hasil_sebelumnya >= 91 && $field->hasil_sebelumnya <= 100){
+                $target = '<strong>'.$field->hasil_sebelumnya.'%</strong> <br><span class="badge rounded-pill text-black bg-platinum  font-size-12" >Platinum</span>';
             }
 
             $no++;
@@ -76,7 +82,7 @@ class Nos extends CI_Controller
             $data['dealer'] = $this->Dealer_model->getdealerbyuser();
             $data['pic_dealer'] = $this->Users_model->getuserbydealer();
             $data['nos_target'] = $this->db->order_by('id_nos_target')->get('nos_target')->result_array();
-            $data['title'] = 'NOS Regional '.$this->session->userdata('nama_regional').'';
+            $data['title'] = 'Network Operational Standart';
             $data['header'] = 'temp/header';
             $data['content'] = 'nos/page-nos';
             $this->load->view('layout', $data);

@@ -16,12 +16,7 @@ class Dashboard extends CI_Controller
 	public function index()
 	{
 		if ($this->session->userdata('email')) {
-			$regional = $this->Users_model->getRegional($this->session->userdata('id_user'));
-			if(empty($regional['id_dealer']) || $regional['id_dealer'] == 0){
-				$data['title'] = 'Dashboard';
-			}else{
-				$data['title'] = 'Dashboard Regional '.$this->session->userdata('nama_regional').'';
-			}
+			$data['title'] = 'Dashboard';
             $data['kategori'] = $this->Powerbi_kategori_model->getpowerbi_kategori();
 			$data['log_login'] = $this->Dashboard_model->log_login();
 			$data['header'] = 'temp/header';

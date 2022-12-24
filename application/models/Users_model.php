@@ -89,7 +89,6 @@ class Users_model extends CI_Model
     {
         $data = [
             "id_dealer" => $this->input->post('id_dealer'),
-            "password" => md5($this->input->post('password')),
             "email" => $this->input->post('email'),
             "nama" => $this->input->post('nama'),
             "jk" => $this->input->post('jk'),

@@ -123,7 +123,8 @@ class Dealer_model extends CI_Model
     public function getdealerbyuser(){
         $this->db->join('user','user.id_dealer = dealer.id_dealer','left');
         $this->db->where('level', 5);
-        $this->db->order_by('dealer.id_dealer', 'asc');
+        $this->db->order_by('dealer.nama_dealer', 'asc');
+        $this->db->group_by('dealer.id_dealer');
         return $this->db->get('dealer')->result_array();
     }
 

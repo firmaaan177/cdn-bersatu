@@ -27,7 +27,7 @@ class Nos extends CI_Controller
         foreach ($list as $field) {
 
             $nos_audit = $this->db->where('id_nos', $field->id_nos)->get('nos_audit')->row_array();
-            $dealer = "<strong>$field->nama_dealer</strong><br><span>Tipe Jaringan : $field->nama_panel</span>";
+            $dealer = "<strong>$field->nama_dealer</strong><br><span>Tipe Panel : <strong>$field->nama_panel</strong></span>";
 
             if($nos_audit == 0){
                 $status = '<span class="badge rounded-pill bg-warning font-size-12">Audit sedang dilakukan</span>';

@@ -32,7 +32,7 @@
     }
     $persentase = $total_audit/$total_item * 100;
     ?>
-		<div class="col-lg-6">
+		<div class="col-lg-6 col-6">
 			<div class="card card-body p-3">
 				<a href="<?= base_url() ?>nos/sub_item/<?= encrypt_url($nos['id_nos']) ?>/<?= encrypt_url($row['id_panel_sub']) ?>/<?= $row['item'] ?>">
                     <div class="row">

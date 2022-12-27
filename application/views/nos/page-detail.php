@@ -95,62 +95,66 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <?php foreach($nos_data as $row) { 
-                                $mot = str_replace("dan", "&", $row['mot']);
-                                $url = urldecode($mot);
-                                $master_nos = $this->db->where('mot', $url)->get('nos_data')->result_array();
+                            <?php if(!empty($nos_data)) { ?>
+                                <?php foreach($nos_data as $row) { 
+                                    $mot = str_replace("dan", "&", $row['mot']);
+                                    $url = urldecode($mot);
+                                    $master_nos = $this->db->where('mot', $url)->get('nos_data')->result_array();
 
-                                foreach($master_nos as $rows){
-                                    $exist_good = $this->db->where('id_nos_data', $rows['id_nos_data'])->where('nilai', 1)->get('nos_audit')->result_array();
-                                    $not_exist_good = $this->db->where('id_nos_data', $rows['id_nos_data'])->where('nilai', $nilai_custom)->get('nos_audit')->result_array();
-                                    $not_exist = $this->db->where('id_nos_data', $rows['id_nos_data'])->where('nilai', 0)->get('nos_audit')->result_array();
-                                    $audit = $this->db->where('id_nos_data', $rows['id_nos_data'])->get('nos_audit')->result_array();
+                                    foreach($master_nos as $rows){
+                                        $exist_good = $this->db->where('id_nos_data', $rows['id_nos_data'])->where('nilai', 1)->get('nos_audit')->result_array();
+                                        $not_exist_good = $this->db->where('id_nos_data', $rows['id_nos_data'])->where('nilai', $nilai_custom)->get('nos_audit')->result_array();
+                                        $not_exist = $this->db->where('id_nos_data', $rows['id_nos_data'])->where('nilai', 0)->get('nos_audit')->result_array();
+                                        $audit = $this->db->where('id_nos_data', $rows['id_nos_data'])->get('nos_audit')->result_array();
 
-                                    foreach($audit as $rows){
-                                        if($rows['nilai'] == 1){
-                                            $total_exist_good = count($exist_good) * 1;
-                                        }else if($rows['nilai'] == -1){
-                                            $total_not_exist_good = count($not_exist_good) * -1;
-                                        }else if($rows['nilai'] == 0){
-                                            $total_not_exist = count($not_exist) * 0;
+                                        foreach($audit as $rows){
+                                            if($rows['nilai'] == 1){
+                                                $total_exist_good = count($exist_good) * 1;
+                                            }else if($rows['nilai'] == -1){
+                                                $total_not_exist_good = count($not_exist_good) * -1;
+                                            }else if($rows['nilai'] == 0){
+                                                $total_not_exist = count($not_exist) * 0;
+                                            }else{
+                                                $na = NULL;
+                                            }
+                                        }
+                                        if($audit > 0){
+                                            $total = ($total_exist_good + $total_not_exist_good + $total_not_exist) / count($master_nos)*100;
                                         }else{
-                                            $na = NULL;
+                                            $total = 0;
                                         }
                                     }
-                                    if($audit > 0){
-                                        $total = ($total_exist_good + $total_not_exist_good + $total_not_exist) / count($master_nos)*100;
-                                    }else{
-                                        $total = 0;
-                                    }
-                                }
-                                
-                            ?>
-                            <tr>
-                                <td width="500" class="text-start"><a href="<?= base_url() ?>nos/detail_mot/<?= encrypt_url($nos['id_nos']) ?>/<?= str_replace("&", "dan", $row['mot']); ?>"><?= $row['mot'] ?></a></td>
-                                <td><?= number_format($total, 2) ?>%</td>
-                                <td>
-                                    <?php if(!empty($row['komentar'])){ ?>
-                                        <p class="mb-0"><?= word_limiter($row['komentar'], 50) ?></p>
-                                    <?php }else{ ?>
-                                        <?php if($this->session->userdata('level') != 5){ ?>
-                                            <button class="btn btn-primary waves-effect waves-light btn-sm" data-bs-toggle="modal" data-bs-target="#modalAdd" data-mot="<?= $row['mot']?>"><i class="uil-plus mr-1"></i> Tambah Komentar</button>
+                                    
+                                ?>
+                                <tr>
+                                    <td width="500" class="text-start"><a href="<?= base_url() ?>nos/detail_mot/<?= encrypt_url($nos['id_nos']) ?>/<?= str_replace("&", "dan", $row['mot']); ?>"><?= $row['mot'] ?></a></td>
+                                    <td><?= number_format($total, 2) ?>%</td>
+                                    <td>
+                                        <?php if(!empty($row['komentar'])){ ?>
+                                            <p class="mb-0"><?= word_limiter($row['komentar'], 50) ?></p>
                                         <?php }else{ ?>
-                                            <span>-</span>
+                                            <?php if($this->session->userdata('level') != 5){ ?>
+                                                <button class="btn btn-primary waves-effect waves-light btn-sm" data-bs-toggle="modal" data-bs-target="#modalAdd" data-mot="<?= $row['mot']?>"><i class="uil-plus mr-1"></i> Tambah Komentar</button>
+                                            <?php }else{ ?>
+                                                <span>-</span>
+                                            <?php } ?>
                                         <?php } ?>
-                                    <?php } ?>
-                                </td>
-                                <td width="10" align="center">
-                                    <?php if($row['is_lock'] == 1){ ?>
-                                        <span style="font-size:20px;" class="fas fa-lock text-danger"></span>
-                                    <?php }else{?>
-                                        <?php if($this->session->userdata('level') != 5){ ?>
-                                            <button type="button" class="btn btn-success btn-round btn-sm lock" mot="<?= $row['mot']?>"><i class="fas fa-lock"></i></button>
-                                        <?php }else{ ?>
-                                            <span style="font-size:20px;" class="uil-times-circle text-danger"></span>
+                                    </td>
+                                    <td width="10" align="center">
+                                        <?php if($row['is_lock'] == 1){ ?>
+                                            <span style="font-size:20px;" class="fas fa-lock text-danger"></span>
+                                        <?php }else{?>
+                                            <?php if($this->session->userdata('level') != 5){ ?>
+                                                <button type="button" class="btn btn-success btn-round btn-sm lock" mot="<?= $row['mot']?>"><i class="fas fa-lock"></i></button>
+                                            <?php }else{ ?>
+                                                <span style="font-size:20px;" class="uil-times-circle text-danger"></span>
+                                            <?php } ?>
                                         <?php } ?>
-                                    <?php } ?>
-                                </td>
-                            </tr>
+                                    </td>
+                                </tr>
+                                <?php } ?>
+                            <?php }else { ?>
+                            <tr><td colspan="4" class="text-center">Data tidak ditemukan.</td></tr>
                             <?php } ?>
                         </tbody>
                     </table>

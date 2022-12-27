@@ -88,6 +88,7 @@ class Nos_model extends CI_Model
 
     public function detail($id_nos)
     {
+        $this->db->where('id_dealer', $this->session->userdata('id_dealer'));
         $this->db->where('id_nos', $id_nos);
         return $this->db->get('nos')->row_array();
     }

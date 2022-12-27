@@ -21,7 +21,7 @@
         <p>Terdiri dari <?= count($nos_data) ?> Sub Item NOS</p>
     </div>
 	<?php foreach($nos_data as $row) { 
-    $check_audit = $this->db->where('id_nos_data', $row['id_nos_data'])->where('YEAR(due_date)', $year)->get('nos_audit')->row_array();
+    $check_audit = $this->db->where('id_nos_data', $row['id_nos_data'])->where('YEAR(due_date)', $year)->where('id_nos', $id_nos)->get('nos_audit')->row_array();
     ?>
 		<div class="col-lg-6">
 			<div class="card card-body p-3">

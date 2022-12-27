@@ -25,7 +25,7 @@
     $total_item = count($item);
     $total_audit = 0;
     foreach($item as $rows){
-        $check_audit = $this->db->where('id_nos_data', $rows['id_nos_data'])->where('YEAR(due_date)', $year)->get('nos_audit')->result_array();
+        $check_audit = $this->db->where('id_nos_data', $rows['id_nos_data'])->where('YEAR(due_date)', $year)->where('id_nos', $id_nos)->get('nos_audit')->result_array();
         foreach($check_audit as $count){
             $total_audit++;
         }

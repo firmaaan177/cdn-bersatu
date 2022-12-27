@@ -159,6 +159,7 @@ class Nos extends CI_Controller
 
     public function item($id_nos, $id_panel_sub){
         if ($this->session->userdata('email')) {
+            $data['id_nos'] = decrypt_url($id_nos);
             $data['title'] = 'Daftar Item';
             $data['header'] = 'temp/header';
             $data['content'] = 'nos/page-item';

@@ -68,9 +68,4 @@ class Dashboard extends CI_Controller
 			redirect('auth');
 		}
 	}
-
-	public function grafik_visitor()
-	{
-		echo json_encode($this->Dashboard_model->grafik_visitor());
-	}
 }

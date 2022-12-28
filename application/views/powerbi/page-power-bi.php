@@ -82,14 +82,14 @@
                         </div>
                         <div class="form-group mb-3 col-md-12">
                             <label class="form-control-label">
-                                Dealer <span class="text-danger">*</span>
+                                Dealer
                             </label>
                             <select name="id_dealer[]" id="id_dealer" class="form-control select2" multiple='multiple' required>
                             </select>
                         </div>
                         <div class="form-group mb-3 col-md-12">
                             <label class="form-control-label">
-                                Pilih User <span class="text-danger">*</span>
+                                User
                             </label>
                             <select name="id_user[]" id="id_user" class="form-control select2" required multiple='multiple'>
                             </select>
@@ -152,6 +152,24 @@
                                 <?php } ?>
                             </select>
                         </div>
+
+                        <div class="form-group mb-3 col-md-12">
+                            <label class="form-control-label">
+                                Dealer
+                            </label>
+                            <input type="hidden" id="temp_id_dealer">
+                            <select name="id_dealer[]" id="id_dealer2" class="form-control select2" multiple='multiple' required>
+                            </select>
+                        </div>
+                        <div class="form-group mb-3 col-md-12">
+                            <label class="form-control-label">
+                                User
+                            </label>
+                            <input type="hidden" id="temp_id_user">
+                            <select name="id_user[]" id="id_user2" class="form-control select2" required multiple='multiple'>
+                            </select>
+                        </div>
+
                         <div class="form-group mb-3 col-md-12">
                             <label class="form-control-label">
                                 Kategori <span class="text-danger">*</span>
@@ -276,14 +294,64 @@
             });
         });
 
+        // EDIT
+
         $("tbody").on("click", '.edit', function() {
             $("#id_powerbi").val($(this).attr('id_powerbi'));
             $("#title2").val($(this).attr('title'));
             $("#iframe2").val($(this).attr('iframe'));
             $("#tanggal2").val($(this).attr('tanggal'));
             $("#sumber_data2").val($(this).attr('sumber_data'));
+            $("#temp_id_dealer").val($(this).attr('id_dealer'));
+            $("#temp_id_user").val($(this).attr('id_user'));
             $("#id_regional2").val($(this).attr('id_regional')).trigger('change');
             $("#id_powerbi_kategori2").val($(this).attr('id_powerbi_kategori')).trigger('change');
+        });
+
+        
+        $('#id_regional2').on('change', function() {
+            var temp_id_dealer = $("#temp_id_dealer").val();
+            var temp_id_user = $("#temp_id_user").val();
+            var id_dealer = temp_id_dealer.split(",");
+            var id_user = temp_id_user.split(",");
+            console.log(temp_id_user);
+            $.ajax({
+                url: '<?= base_url() ?>powerbi/getDealerByRegional/' + this.value ,
+                type: "POST",
+                dataType: 'json',
+                success: function(data) {
+                    $('#id_dealer2').prop("disabled", false);
+                    $("#id_dealer2").empty().trigger('change');
+                    var selOpts = "";
+                    for (i=0;i<data.length;i++)
+                    {
+                        var id = data[i]['id_dealer'];
+                        var val = data[i]['nama_dealer'];
+                        selOpts += "<option value='"+id+"'>"+val+"</option>";
+                    }
+                    $('#id_dealer2').append(selOpts);
+                    $("#id_dealer2").val(id_dealer).trigger('change');
+                }
+            });
+            
+            $.ajax({
+                url: '<?= base_url() ?>powerbi/getUserByRegional/' + this.value ,
+                type: "POST",
+                dataType: 'json',
+                success: function(data) {
+                    $('#id_user2').prop("disabled", false);
+                    $("#id_user2").empty().trigger('change');
+                    var selOpts = "";
+                    for (i=0;i<data.length;i++)
+                    {
+                        var id = data[i]['id_user'];
+                        var val = data[i]['nama'];
+                        selOpts += "<option value='"+id+"'>"+val+"</option>";
+                    }
+                    $('#id_user2').append(selOpts);
+                    $("#id_user2").val(id_user).trigger('change');
+                }
+            });
         });
 
         $('#edit').click(function() {

@@ -45,7 +45,7 @@ class Powerbi extends CI_Controller
 				<div class='btn-group'>
 					<button type='button' class='btn btn-info btn-sm dropdown-toggle' data-bs-toggle='dropdown' aria-haspopup='true' aria-expanded='false'>Aksi <i class='mdi mdi-chevron-down'></i></button>
 					<div class='dropdown-menu'>
-						<a class='dropdown-item edit' href='#' data-bs-toggle='modal' data-bs-target='#modalEdit' id_powerbi='" . $field->id_powerbi . "'  id_regional='" . $field->id_regional . "' id_powerbi_kategori='" . $field->id_powerbi_kategori . "'  title='" . $field->title . "' tanggal='" . $field->tanggal . "' iframe='" . $field->iframe . "' tanggal='" . $field->created_date . "' sumber_data='" . $field->sumber_data . "'><i class='uil-edit-alt mr-1'></i> Edit</a>
+						<a class='dropdown-item edit' href='#' data-bs-toggle='modal' data-bs-target='#modalEdit' id_powerbi='" . $field->id_powerbi . "'  id_regional='" . $field->id_regional . "'  id_dealer='" . $field->id_dealer . "' id_user='" . $field->id_user . "' id_powerbi_kategori='" . $field->id_powerbi_kategori . "'  title='" . $field->title . "' tanggal='" . $field->tanggal . "' iframe='" . $field->iframe . "' tanggal='" . $field->created_date . "' sumber_data='" . $field->sumber_data . "'><i class='uil-edit-alt mr-1'></i> Edit</a>
 
                         <a class='dropdown-item hapus' href='#' data-id='".$field->id_powerbi."'><i class='uil-trash-alt mr-1'></i> Hapus</a>
 					</div>

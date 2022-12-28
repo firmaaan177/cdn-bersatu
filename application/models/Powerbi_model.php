@@ -99,10 +99,20 @@ class Powerbi_model extends CI_Model
 
     public function update()
     {
+        if(!empty($this->input->post('id_user'))){
+            $id_user = implode(',',$this->input->post('id_user'));
+        }else{
+            $id_user = '';
+        }
+        if(!empty($this->input->post('id_dealer'))){
+            $id_dealer = implode(',',$this->input->post('id_dealer'));
+        }else{
+            $id_dealer = $this->input->post('id_dealer');
+        }
         $data = array(
             'id_regional' => $this->input->post('id_regional'),
-            'id_dealer' => $this->input->post('id_dealer'),
-            'id_user' => $this->input->post('id_user'),
+            'id_dealer' => $id_dealer,
+            'id_user' => $id_user,
             'id_powerbi_kategori' => $this->input->post('id_powerbi_kategori'),
             'title' => $this->input->post('title'),
             'tanggal' => $this->input->post('tanggal'),

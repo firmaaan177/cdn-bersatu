@@ -247,6 +247,17 @@ class Users_model extends CI_Model
         return $this->db->get('user')->row_array();
     }
 
+    public function getUserByRegional($id_regional)
+    {
+        if(!empty($id_regional)){
+            $this->db->where('dealer.id_regional', $id_regional);
+        }
+        $this->db->join('dealer', 'dealer.id_dealer = user.id_dealer','left');
+        $this->db->order_by('user.nama', 'asc');
+        return $this->db->get('user')->result_array();
+    }
+
+
     public function getuserbydealer()
     {
         $this->db->order_by('nama', 'desc');
@@ -271,6 +282,7 @@ class Users_model extends CI_Model
             return false;
         }
     }
+
     public function getCurrentUser()
     {
         $this->db->where('email', $_SESSION['email']);

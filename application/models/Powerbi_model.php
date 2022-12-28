@@ -70,8 +70,20 @@ class Powerbi_model extends CI_Model
 
     public function insert()
     {
+        if(!empty($this->input->post('id_user'))){
+            $id_user = implode(',',$this->input->post('id_user'));
+        }else{
+            $id_user = '';
+        }
+        if(!empty($this->input->post('id_dealer'))){
+            $id_dealer = implode(',',$this->input->post('id_dealer'));
+        }else{
+            $id_dealer = $this->input->post('id_dealer');
+        }
         $data = array(
             'id_regional' => $this->input->post('id_regional'),
+            'id_dealer' => $id_dealer,
+            'id_user' => $id_user,
             'id_powerbi_kategori' => $this->input->post('id_powerbi_kategori'),
             'title' => $this->input->post('title'),
             'tanggal' => $this->input->post('tanggal'),
@@ -89,6 +101,8 @@ class Powerbi_model extends CI_Model
     {
         $data = array(
             'id_regional' => $this->input->post('id_regional'),
+            'id_dealer' => $this->input->post('id_dealer'),
+            'id_user' => $this->input->post('id_user'),
             'id_powerbi_kategori' => $this->input->post('id_powerbi_kategori'),
             'title' => $this->input->post('title'),
             'tanggal' => $this->input->post('tanggal'),
@@ -102,11 +116,6 @@ class Powerbi_model extends CI_Model
         return;
     }
 
-    public function getpowerbi()
-    {
-        $this->db->order_by('id_powerbi', 'asc');
-        return $this->db->get('powerbi')->result_array();
-    }
 
     public function getpowerbi_by_regional($id_powerbi_kategori)
     {
@@ -114,6 +123,34 @@ class Powerbi_model extends CI_Model
         $this->db->where('id_regional', $this->session->userdata('id_regional'));
         $this->db->order_by('created_date', 'desc');
         return $this->db->get('powerbi')->row_array();
+    }
+
+    public function getPowerBi($id_regional = '', $id_dealer ='', $id_user='')
+    {
+        if(!empty($id_regional)){
+            $this->db->where('powerbi.id_regional', $id_regional,'both');
+        }
+        if(!empty($id_dealer)){
+            $this->db->or_like('powerbi.id_dealer', $id_dealer,'both');
+        }
+        if(!in_array($this->session->userdata('id_user'), explode(",",LEVEL_AKSES_ADMIN))){
+            $this->db->or_like('powerbi.id_user', $id_user, 'both');
+        }
+        $this->db->join('powerbi_kategori', 'powerbi_kategori.id_powerbi_kategori = powerbi.id_powerbi_kategori','left');
+        $this->db->join('regional', 'regional.id_regional = powerbi.id_regional','left');
+        $this->db->order_by('powerbi.id_powerbi', 'asc');
+        return $this->db->get('powerbi')->result_array();
+    }
+
+    public function getPowerBiForFilter($id_dealer ='')
+    {
+        if(!empty($id_dealer)){
+            $this->db->like('powerbi.id_dealer', $id_dealer,'both');
+        }
+        $this->db->join('powerbi_kategori', 'powerbi_kategori.id_powerbi_kategori = powerbi.id_powerbi_kategori','left');
+        $this->db->join('regional', 'regional.id_regional = powerbi.id_regional','left');
+        $this->db->order_by('powerbi.id_powerbi', 'asc');
+        return $this->db->get('powerbi')->result_array();
     }
 
     public function detail($id_powerbi)

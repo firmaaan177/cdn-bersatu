@@ -10,136 +10,47 @@
 	</script>
 <?php } ?>
 
-<div class="row">
-	<?php foreach($kategori as $row) { ?>
+<?php if(in_array($this->session->userdata('id_user'),  explode(",",LEVEL_AKSES_ADMIN))) { ?>
+<div class="row mb-4">
+	<div class="col-md-3">
+		<div class="input-group">
+			<select class="form-select select2" name="id_dealer" id="id_dealer">
+				<option value="">Semua Dealer</option>
+				<?php foreach($dealer as $row){ ?>
+					<option value="<?= $row['id_dealer'] ?>"><?= $row['nama_dealer'] ?></option>
+				<?php } ?>
+			</select>
+		</div>
+	</div>
+</div>
+<?php } ?>
+
+<div class="row" id="load">
+	<?php foreach($powerbi as $row) { ?>
 		<div class="col-lg-4">
 			<div class="card card-body">
-				<a href="<?= base_url() ?>dashboard/detail/<?= encrypt_url($row['id_powerbi_kategori']) ?> "><h4 class="card-title"><i class="uil-chart-bar text-primary me-2"></i><?= $row['nama_kategori'] ?></h4></a> 
-				<p class="card-text"><?= $row['deskripsi'] ?></p>
+				<a href="<?= base_url() ?>dashboard/powerbi/<?= encrypt_url($row['id_powerbi']) ?> "><h4 class="card-title"><i class="uil-chart-bar text-primary me-2"></i><?= $row['nama_kategori'] ?> <span class="badge rounded-pill bg-primary font-size-12"><?= $row['nama_regional'] ?></span></h4></a> 
+				<p class="card-text"><?= word_limiter($row['deskripsi'], 20) ?></p>
 			</div>
 		</div>
 	<?php } ?>
-	<!-- <div class="col-md-3">
-		<div class="card">
-			<div class="card-body">
-				<h4 class="card-title mb-4">Terakhir Login</h4>
-				<ol class="activity-feed mb-0 ps-2" data-simplebar style="max-height: 336px;">
-					<?php foreach ($log_login as $row) { ?>
-						<li class="feed-item">
-							<p class="text-muted mb-1 font-size-13"><?= date('d F Y - h:i:s', strtotime($row['created'])) ?>
-							</p>
-							<p class="mt-0 mb-0"><?= $row['nama'] ?></p>
-							<p class="mt-0 mb-0"><span class="text-primary"><?= $row['level'] ?></span></p>
-						</li>
-					<?php } ?>
-
-				</ol>
-
-			</div>
-		</div>
-	</div> -->
 </div>
-<!-- apexcharts -->
-<script src="<?= base_url(); ?>assets/libs/apexcharts/apexcharts.min.js"></script>
 
 <script>
-	$(document).ready(function() {
-		getVisitor();
-	})
-
-	function getVisitor() {
-		$.ajax({
-			url: base_url + 'dashboard/grafik_visitor',
-			method: "POST",
-			dataType: "json",
-			success: function(data) {
-				var kategori = $.map(data, function(n, i) {
-					return [new Date(n.created).toLocaleDateString()];
-				});
-				var jumlah = $.map(data, function(n, i) {
-					return [n.visitor];
-				});
-				var serie = $.map(data, function(n, i) {
-					return [{
-						x: new Date(n.created).getTime(),
-						y: n.visitor
-					}];
-				});
-				var options = {
-					chart: {
-						height: 350,
-						type: "bar",
-						stacked: true
-					},
-					dataLabels: {
-						enabled: false
-					},
-					colors: ["#f1b44c"],
-					series: [{
-						name: "Pengunjung",
-						data: jumlah
-					}],
-					stroke: {
-						width: [2]
-					},
-					plotOptions: {
-						bar: {
-							columnWidth: "20%"
-						}
-					},
-					xaxis: {
-						categories: kategori
-					},
-					yaxis: [{
-							axisTicks: {
-								show: true
-							},
-							axisBorder: {
-								show: true,
-								color: "#FF1654"
-							},
-							labels: {
-								style: {
-									colors: "#FF1654"
-								}
-							},
-							title: {
-								text: "Pengunjung",
-								style: {
-									color: "#FF1654"
-								}
-							}
-						},
-						{
-							opposite: true,
-							axisTicks: {
-								show: true
-							},
-							axisBorder: {
-								show: true,
-								color: "#247BA0"
-							},
-							labels: {
-								style: {
-									colors: "#247BA0"
-								}
-							}
-						}
-					],
-					tooltip: {
-						shared: false,
-						intersect: true,
-						x: {
-							show: false
-						}
-					},
-					legend: {
-						horizontalAlign: "left",
-						offsetX: 40
-					}
-				};
-				(chart = new ApexCharts(document.querySelector("#chartVisitor"), options)).render();
-			}
+    $(document).ready(function() {
+		$('#id_dealer').on('change', function() {
+			$.ajax({
+				url: '<?= base_url() ?>dashboard/filter/' + this.value,
+				type: "POST",
+                // dataType: 'json',
+				data: {
+					id_dealer : this.value
+				},
+				success: function(data) {
+					console.log(data);
+					$('#load').html(data);
+				}
+			});
 		});
-	}
+	});
 </script>

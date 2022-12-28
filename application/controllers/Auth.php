@@ -8,6 +8,7 @@ class Auth extends CI_Controller
 	{
 		parent::__construct();
 		$this->load->model('Users_model');
+		$this->load->model('Regional_model');
 	}
 
 	public function index()
@@ -189,6 +190,28 @@ class Auth extends CI_Controller
 			redirect('auth/login');
 		}
 	}
+
+	public function setSessions($session = ''){
+		if($session == 'all'){
+			$data['id_regional'] = $this->session->set_userdata('id_regional', 0);
+			$data['nama_regional'] = $this->session->set_userdata('nama_regional', 'Semua Regional');
+		}else{
+			$regional = $this->Regional_model->detail($session);
+
+			if(!empty($regional)){
+				$data['id_regional'] = $this->session->set_userdata('id_regional', $regional['id_regional']);
+				$data['nama_regional'] = $this->session->set_userdata('nama_regional', $regional['nama_regional']);
+				$data['id_regional'] = $this->session->userdata('id_regional');
+				$data['nama_regional'] = $this->session->userdata('nama_regional');
+				$data['success'] = true;
+				$data['msg'] = 'Berhasil Ganti Regional';
+			}else{
+				$data['success'] = false;
+				$data['msg'] = 'Regional tidak ditemukan';
+			}
+		}
+        echo json_encode($data);
+	 }
 
 	public function logout()
 	{

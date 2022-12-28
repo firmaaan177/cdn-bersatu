@@ -10,6 +10,8 @@ class Powerbi extends CI_Controller
         $this->load->model('Powerbi_model');
         $this->load->model('Powerbi_kategori_model');
         $this->load->model('Regional_model');
+        $this->load->model('Dealer_model');
+        $this->load->model('Users_model');
     }
 
     public function index()
@@ -18,8 +20,10 @@ class Powerbi extends CI_Controller
             $data['title'] = 'Power BI';
             $data['header'] = 'temp/header';
             $data['content'] = 'powerbi/page-power-bi';
-            $data['regional'] = $this->Regional_model->getregional();
-            $data['kategori'] = $this->Powerbi_kategori_model->getpowerbi_kategori();
+            $data['regional'] = $this->Regional_model->getRegional();
+            $data['dealer'] = $this->Dealer_model->getDealer();
+            $data['user'] = $this->Users_model->list_user();
+            $data['kategori'] = $this->Powerbi_kategori_model->getKategori();
             $this->load->view('layout', $data);
         } else {
             $this->session->set_flashdata('message', 'Anda harus Login terlebih dahulu!');
@@ -64,6 +68,16 @@ class Powerbi extends CI_Controller
         );
         //output dalam format JSON
         echo json_encode($output);
+    }
+
+    public function getDealerByRegional($id_regional){
+        $data = $this->Dealer_model->getDealer($id_regional);
+        echo json_encode($data);
+    }
+
+    public function getUserByRegional($id_regional){
+        $data = $this->Users_model->getUserByRegional($id_regional);
+        echo json_encode($data);
     }
 
     public function insert()

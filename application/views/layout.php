@@ -51,8 +51,18 @@
 <div class="rightbar-overlay"></div>
 <script>
 	$(document).ready(function() {
-		$('.select2').select2();
+		$('.select2').select2({
+			// placeholder: "Please select",
+			allowClear: true
+		});
+
+		setTimeout(function(){
+			$('body').addClass('preloader');
+			$('h1').css('color','#222222');
+		}, 3000);
+		
 	});
+
 </script>
 
 <!-- JAVASCRIPT -->

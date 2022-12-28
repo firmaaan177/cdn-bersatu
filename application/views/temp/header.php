@@ -6,6 +6,7 @@ $roles = $this->db->where('id_level', $this->session->userdata('level'))->get('r
 $id_menu = explode(',',$roles['id_menu']);
 
 $menu = $this->db->where_in('id_menu', $id_menu)->get('menu')->result_array();
+$regional = $this->db->order_by('nama_regional')->get('regional')->result_array();
 
 if($this->session->userdata('level') == 5){
 	$this->db->join('nos_data', 'nos_data.id_nos_data = nos_audit.id_nos_data','left');
@@ -62,7 +63,6 @@ if($this->session->userdata('level') == 5){
 
 
 <body data-sidebar="dark">
-
 	<!-- Begin page -->
 	<div id="layout-wrapper">
 
@@ -101,6 +101,23 @@ if($this->session->userdata('level') == 5){
 						<button type="button" class="btn header-item noti-icon waves-effect">
 							<i class="uil-map-marker-alt font-size-16"></i>  <span class="d-none d-xl-inline-block ms-1 fw-medium font-size-15"><?= $this->session->userdata('nama_regional') ?></span>
 						</button>
+					</div>
+					<?php } ?>
+					<?php if(in_array($this->session->userdata('id_user'),  explode(",",LEVEL_AKSES_ADMIN))) { ?>
+					<div class="dropdown d-inline-block">
+						<button type="button" class="btn header-item waves-effect" id="page-header-user-dropdown" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+							<span class="d-none d-xl-inline-block ms-1 fw-medium font-size-14"><i class="uil-map-marker-alt font-size-14"></i> <?= !empty($this->session->userdata('nama_regional')) ? $this->session->userdata('nama_regional') : 'Semua Regional' ?></span>
+							<i class="uil-angle-down d-none d-xl-inline-block font-size-15"></i>
+						</button>
+						<div class="dropdown-menu dropdown-menu-end">
+							<!-- item-->
+							<a class="dropdown-item set-regional" href="#" id-regional="all"><i class="uil uil-map-marker-alt font-size-14 align-middle text-muted me-1"></i>
+								<span class="align-middle">Semua Regional</span></a>
+							<?php foreach($regional as $row) { ?>
+								<a class="dropdown-item set-regional" href="#" id-regional="<?= $row['id_regional'] ?>"><i class="uil uil-map-marker-alt font-size-14 align-middle text-muted me-1"></i>
+								<span class="align-middle"><?= $row['nama_regional'] ?></span></a>
+							<?php } ?>
+						</div>
 					</div>
 					<?php } ?>
 					<div class="dropdown d-inline-block">
@@ -155,8 +172,8 @@ if($this->session->userdata('level') == 5){
 					<div class="dropdown d-inline-block">
 						<button type="button" class="btn header-item waves-effect" id="page-header-user-dropdown" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
 							<img class="rounded-circle header-profile-user" src="<?= base_url(); ?>assets/img/foto_anggota/<?= $user['image'] ?>" alt="Header Avatar">
-							<span class="d-none d-xl-inline-block ms-1 fw-medium font-size-15">Halo, <?= $user['nama'] ?></span>
-							<i class="uil-angle-down d-none d-xl-inline-block font-size-15"></i>
+							<span class="d-none d-xl-inline-block ms-1 fw-medium font-size-14">Halo, <?= $user['nama'] ?></span>
+							<i class="uil-angle-down d-none d-xl-inline-block font-size-14"></i>
 						</button>
 						<div class="dropdown-menu dropdown-menu-end">
 							<!-- item-->
@@ -166,7 +183,6 @@ if($this->session->userdata('level') == 5){
 							<a class="dropdown-item" href="<?= base_url(); ?>auth/logout"><i class="uil uil-sign-out-alt font-size-18 align-middle me-1 text-muted"></i> <span class="align-middle">Logout</span></a>
 						</div>
 					</div>
-
 				</div>
 			</div>
 		</header>
@@ -241,3 +257,21 @@ if($this->session->userdata('level') == 5){
 			</div>
 		</div>
 		<!-- Left Sidebar End -->
+
+<script>
+	$('.set-regional').click(function(){
+		var id_regional = $(this).attr('id-regional');
+		$.ajax({
+			url: '<?= base_url() ?>auth/setSessions/' + id_regional,
+			type: "POST",
+			dataType: 'json',
+			data: {
+				id_regional : id_regional
+			},
+			success: function(data) {
+				console.log(data);
+				location.reload();
+			}
+		});
+	});
+</script>

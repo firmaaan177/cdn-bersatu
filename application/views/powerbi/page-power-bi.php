@@ -35,7 +35,7 @@
     </div>
 </div>
 
-<div id="modalAdd" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+<div id="modalAdd" class="modal fade" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
@@ -52,6 +52,17 @@
                             </label>
                             <input type="text" class="form-control" name="title" id="title" placeholder="Judul Power BI" required>
                         </div>
+                        <div class="form-group mb-3 col-md-12">
+                            <label class="form-control-label">
+                                Kategori <span class="text-danger">*</span>
+                            </label>
+                            <select name="id_powerbi_kategori" id="id_powerbi_kategori" class="form-control select2" required>
+                                <option value="" selected disabled>- Pilih Kategori -</option>
+                                <?php foreach($kategori as $row){ ?>
+                                    <option value="<?= $row['id_powerbi_kategori'] ?>"><?= $row['nama_kategori'] ?></option>
+                                <?php } ?>
+                            </select>
+                        </div>
                         <div class="form-group mb-3 col-md-6">
                             <label class="form-control-label">
                                 Tanggal <span class="text-danger">*</span>
@@ -62,8 +73,8 @@
                             <label class="form-control-label">
                                 Regional <span class="text-danger">*</span>
                             </label>
-                            <select name="id_regional" id="id_regional" class="form-control select2" required>
-                                <option value="">- Pilih Regional -</option>
+                            <select name="id_regional" id="id_regional" class="form-control select2" placeholder="Pilih Regional" required>
+                                <option value=""></option>
                                 <?php foreach($regional as $row){ ?>
                                     <option value="<?= $row['id_regional'] ?>"><?= $row['nama_regional'] ?></option>
                                 <?php } ?>
@@ -71,13 +82,16 @@
                         </div>
                         <div class="form-group mb-3 col-md-12">
                             <label class="form-control-label">
-                                Kategori <span class="text-danger">*</span>
+                                Dealer <span class="text-danger">*</span>
                             </label>
-                            <select name="id_powerbi_kategori" id="id_powerbi_kategori" class="form-control select2" required>
-                                <option value="" selected disabled>- Pilih Kategori -</option>
-                                <?php foreach($kategori as $row){ ?>
-                                    <option value="<?= $row['id_powerbi_kategori'] ?>"><?= $row['nama_kategori'] ?></option>
-                                <?php } ?>
+                            <select name="id_dealer[]" id="id_dealer" class="form-control select2" multiple='multiple' required>
+                            </select>
+                        </div>
+                        <div class="form-group mb-3 col-md-12">
+                            <label class="form-control-label">
+                                Pilih User <span class="text-danger">*</span>
+                            </label>
+                            <select name="id_user[]" id="id_user" class="form-control select2" required multiple='multiple'>
                             </select>
                         </div>
                         <div class="form-group mb-3 col-md-12">
@@ -197,6 +211,46 @@
 <script>
     $(document).ready(function() {
         tampil();
+        $('#id_dealer').prop("disabled", true);
+        $('#id_user').prop("disabled", true);
+        $('#id_regional').on('change', function() {
+            $.ajax({
+                url: '<?= base_url() ?>powerbi/getDealerByRegional/' + this.value ,
+                type: "POST",
+                dataType: 'json',
+                success: function(data) {
+                    $('#id_dealer').prop("disabled", false);
+                    $("#id_dealer").empty().trigger('change');
+                    var selOpts = "";
+                    for (i=0;i<data.length;i++)
+                    {
+                        var id = data[i]['id_dealer'];
+                        var val = data[i]['nama_dealer'];
+                        selOpts += "<option value='"+id+"'>"+val+"</option>";
+                    }
+                    $('#id_dealer').append(selOpts);
+                }
+            });
+
+            $.ajax({
+                url: '<?= base_url() ?>powerbi/getUserByRegional/' + this.value ,
+                type: "POST",
+                dataType: 'json',
+                success: function(data) {
+                    $('#id_user').prop("disabled", false);
+                    $("#id_user").empty().trigger('change');
+                    var selOpts = "";
+                    for (i=0;i<data.length;i++)
+                    {
+                        var id = data[i]['id_user'];
+                        var val = data[i]['nama'];
+                        selOpts += "<option value='"+id+"'>"+val+"</option>";
+                    }
+                    $('#id_user').append(selOpts);
+                }
+            });
+        });
+
         // SAVE
         $('#save').click(function() {
             $.ajax({

@@ -71,7 +71,7 @@ class Notifikasi extends CI_Controller
 
     public function index(){
         if ($this->session->userdata('email')) {
-            $data['dealer'] = $this->Dealer_model->getdealerbyuser();
+            $data['dealer'] = $this->Dealer_model->getDealerbyuser();
             $data['pic_dealer'] = $this->Users_model->getuserbydealer();
             $data['nos_target'] = $this->db->order_by('id_nos_target')->get('nos_target')->result_array();
             $data['title'] = 'Notifikasi';

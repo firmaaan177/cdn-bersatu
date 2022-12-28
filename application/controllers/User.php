@@ -28,14 +28,14 @@ class User extends CI_Controller {
 		$data['header'] = 'temp/header';
 		$data['content'] = 'user/add-user';
 		$data['level'] = $this->db->get('user_level')->result_array();
-		$data['dealer'] = $this->Dealer_model->getdealer();
+		$data['dealer'] = $this->Dealer_model->getDealer();
 		$this->load->view('layout', $data);
 	}
 
 	public function edit($id = '')
 	{
 		$data['level'] = $this->db->get('user_level')->result_array();
-		$data['dealer'] = $this->Dealer_model->getdealer();
+		$data['dealer'] = $this->Dealer_model->getDealer();
 		$data['detail'] = $this->Users_model->detail_user(decrypt_url($id));
 		$data['title'] = 'Edit User';
 		$data['header'] = 'temp/header';

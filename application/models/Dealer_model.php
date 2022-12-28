@@ -114,13 +114,16 @@ class Dealer_model extends CI_Model
         return;
     }
 
-    public function getdealer()
+    public function getDealer($id_regional = '')
     {
-        $this->db->order_by('id_dealer', 'asc');
+        if(!empty($id_regional)){
+            $this->db->where('id_regional', $id_regional);
+        }
+        $this->db->order_by('nama_dealer', 'asc');
         return $this->db->get('dealer')->result_array();
     }
 
-    public function getdealerbyuser(){
+    public function getDealerbyuser(){
         $this->db->join('user','user.id_dealer = dealer.id_dealer','left');
         $this->db->where('level', 5);
         $this->db->order_by('dealer.nama_dealer', 'asc');
@@ -133,6 +136,7 @@ class Dealer_model extends CI_Model
         $this->db->where('id_dealer', $id_dealer);
         return $this->db->get('dealer')->row_array();
     }
+    
 
     public function delete($id_dealer)
     {

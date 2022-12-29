@@ -16,8 +16,8 @@
         <button onclick="history.back()" class="btn btn-sm btn-danger"><i class="uil-angle-left"></i> Kembali</button>
     </div>
     <div class="col-md-10 align-self-center">
-        <h4><?= $dealer['nama_dealer'] ?></h4>
-        <p class="mb-2">Kacab : <?= $pic_dealer['nama'] ?> | Telp/Wa : <?= $pic_dealer['nohp'] ?></p>
+        <h4><?= $nos['nama_dealer'] ?></h4>
+        <p class="mb-2">Kacab : <?= $nos['nama'] ?> | Telp/Wa : <?= $nos['nohp'] ?></p>
         <a href="<?= base_url(); ?>nos/report_nos" target="_blank" class="btn btn-success btn-sm">Download Excel</a>
     </div>
     
@@ -25,7 +25,7 @@
         <div class="card border border-primary">
             <div class="card-body text-center">
                 <h3 class="mt-0 text-primary"><?= number_format($persentase, 2) ?>%</h3>
-                <p class="card-text">Target Hasil <strong><?= $target_nos['nama_target'] ?></strong></p>
+                <p class="card-text">Target Hasil <strong><?= $nos['nama_target'] ?></strong></p>
             </div>
         </div>
     </div>
@@ -170,10 +170,10 @@
             </div>
             <div class="card-body">
                 <div class="d-flex align-items-start mb-4">
-                    <img class="d-flex me-3 rounded-circle avatar-sm" src="<?= base_url(); ?>assets/img/foto_anggota/<?= $pic_dealer['image'] ?>">
+                    <img class="d-flex me-3 rounded-circle avatar-sm" src="<?= base_url(); ?>assets/img/foto_anggota/<?= $nos['image'] ?>">
                     <div class="flex-1">
-                        <h5 class="font-size-14 my-1"><?= $pic_dealer['nama'] ?></h5>
-                        <small class="text-muted"><?= $pic_dealer['nama_level'] ?></small>
+                        <h5 class="font-size-14 my-1"><?= $nos['nama'] ?></h5>
+                        <small class="text-muted"><?= $nos['nama_level'] ?></small>
                     </div>
                 </div>
             </div>

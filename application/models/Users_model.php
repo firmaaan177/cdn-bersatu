@@ -264,14 +264,6 @@ class Users_model extends CI_Model
         return $this->db->get('user')->result_array();
     }
 
-    public function get_pic_nos()
-    {
-        $this->db->where('id_dealer', $this->session->userdata('id_dealer'));
-        $this->db->where('level', 6);
-        $this->db->order_by('nama', 'desc');
-        return $this->db->get('user')->result_array();
-    }
-
     function is_email_available($email)
     {
         $this->db->where('email', $email);

@@ -17,8 +17,10 @@ class Nos extends CI_Controller
 
     function get()
     {
-        if(!empty($this->session->userdata('id_dealer'))){
+        if(!in_array($this->session->userdata('level'), explode(",",LEVEL_AKSES_ADMIN))){
             $this->db->where('nos.id_dealer', $this->session->userdata('id_dealer'));
+        }else if($this->session->userdata('id_regional') != 'all' && in_array($this->session->userdata('level'), explode(",",LEVEL_AKSES_ADMIN))){
+            $this->db->where('regional.id_regional', $this->session->userdata('id_regional'));
         }
         $list = $this->Nos_model->get_datatables();
         $data = array();
@@ -62,6 +64,7 @@ class Nos extends CI_Controller
 				</div>
 			";
             $row[] = $dealer;
+            $row[] = $field->nama_regional;
             $row[] = $target;
             $row[] = $status;
             $data[] = $row;
@@ -141,14 +144,10 @@ class Nos extends CI_Controller
         if ($this->session->userdata('email')) {
             $data['title'] = 'Daftar Panel';
             $data['header'] = 'temp/header';
-            $data['content'] = 'nos/page-selected-panel';
-            $data['nos'] = $this->Nos_model->detail(decrypt_url($id_nos));
-            $data['target_nos'] = $this->Nos_model->target_nos($data['nos']['id_nos_target']);
-            $data['dealer'] = $this->Dealer_model->detail($data['nos']['id_dealer']);
-            $data['pic_dealer'] = $this->Users_model->getuserdealer($data['dealer']['id_dealer']);
-            $data['panel'] = $this->Panel_model->detail($data['dealer']['id_panel']);
-            $id_panel_sub = explode(',', $data['panel']['id_panel_sub']);
-            $data['sub_panel'] = $this->db->where_in('id_panel_sub', $id_panel_sub)->get('panel_sub')->result_array();
+            $data['content'] = 'nos/page-panel';
+            $data['nos'] = $this->Nos_model->getNosComplete(decrypt_url($id_nos));
+            $id_panel_sub = explode(',', $data['nos']['id_panel_sub']);
+            $data['sub_panel'] = $this->Nos_model->getPanelSub($id_panel_sub)->result_array();
             $data['persentase'] = $this->persentaseTotalNos($id_panel_sub);
             $this->load->view('layout', $data);
         } else {
@@ -163,15 +162,12 @@ class Nos extends CI_Controller
             $data['title'] = 'Daftar Item';
             $data['header'] = 'temp/header';
             $data['content'] = 'nos/page-item';
-            $data['nos_data'] = $this->Nos_model->item(decrypt_url($id_panel_sub));
-            $data['nos'] = $this->Nos_model->detail(decrypt_url($id_nos));
-            $data['target_nos'] = $this->Nos_model->target_nos($data['nos']['id_nos_target']);
-            $data['dealer'] = $this->Dealer_model->detail($data['nos']['id_dealer']);
-            $data['pic_dealer'] = $this->Users_model->getuserdealer($data['dealer']['id_dealer']);
-            $data['panel'] = $this->Panel_model->detail($data['dealer']['id_panel']);
-            $id_sub = explode(',', $data['panel']['id_panel_sub']);
-            $data['persentase'] = $this->persentaseTotalNos($id_sub);
-            $data['sub_panel'] = $this->Nos_model->detail_sub_panel(decrypt_url($id_panel_sub));
+            $data['nos_data'] = $this->Nos_model->getItemNosData(decrypt_url($id_panel_sub));
+            $data['nos'] = $this->Nos_model->getNosComplete(decrypt_url($id_nos));
+            $id_sub = explode(',', $data['nos']['id_panel_sub']);
+            $data['persentase'] = $this->persentaseTotalNos(decrypt_url($id_nos), $id_sub);
+            $data['sub_panel'] = $this->Nos_model->getPanelSub(decrypt_url($id_panel_sub))->row_array();
+            // var_dump($this->db->last_query());die();
             $data['year'] = date('Y');
             $this->load->view('layout', $data);
         } else {
@@ -188,12 +184,8 @@ class Nos extends CI_Controller
             $data['header'] = 'temp/header';
             $data['content'] = 'nos/page-sub-item';
             $data['nos_data'] = $this->Nos_model->sub_item($url);
-            $data['nos'] = $this->Nos_model->detail(decrypt_url($id_nos));
-            $data['target_nos'] = $this->Nos_model->target_nos($data['nos']['id_nos_target']);
-            $data['dealer'] = $this->Dealer_model->detail($data['nos']['id_dealer']);
-            $data['pic_dealer'] = $this->Users_model->getuserdealer($data['dealer']['id_dealer']);
-            $data['panel'] = $this->Panel_model->detail($data['dealer']['id_panel']);
-            $id_sub = explode(',', $data['panel']['id_panel_sub']);
+            $data['nos'] = $this->Nos_model->getNosComplete(decrypt_url($id_nos));
+            $id_sub = explode(',', $data['nos']['id_panel_sub']);
             $data['persentase'] = $this->persentaseTotalNos($id_sub);
             $data['sub_panel'] = $this->Nos_model->detail_sub_panel(decrypt_url($id_panel_sub));
             $data['year'] = date('Y');
@@ -210,13 +202,9 @@ class Nos extends CI_Controller
             $data['header'] = 'temp/header';
             $data['content'] = 'nos/page-sub-item-detail';
             $data['nos_data'] = $this->Nos_model->sub_item_detail(decrypt_url($id_nos_data));
-            $data['nos'] = $this->Nos_model->detail(decrypt_url($id_nos));
-            $data['target_nos'] = $this->Nos_model->target_nos($data['nos']['id_nos_target']);
-            $data['dealer'] = $this->Dealer_model->detail($data['nos']['id_dealer']);
-            $data['pic_nos'] = $this->Users_model->get_pic_nos();
-            $data['pic_dealer'] = $this->Users_model->getuserdealer($data['dealer']['id_dealer']);
-            $data['panel'] = $this->Panel_model->detail($data['dealer']['id_panel']);
-            $id_sub = explode(',', $data['panel']['id_panel_sub']);
+            $data['nos'] = $this->Nos_model->getNosComplete(decrypt_url($id_nos));
+            $data['pic_nos'] = $this->Nos_model->getPicNos($data['nos']['id_dealer']);
+            $id_sub = explode(',', $data['nos']['id_panel_sub']);
             $data['persentase'] = $this->persentaseTotalNos($id_sub);
             $data['sub_panel'] = $this->Nos_model->detail_sub_panel(decrypt_url($id_panel_sub));
             $this->load->view('layout', $data);
@@ -226,19 +214,21 @@ class Nos extends CI_Controller
         }
     }
 
-    public function sub_item_edit($id_nos, $id_panel_sub, $id_nos_data){
+    public function sub_item_edit($id_nos, $id_panel_sub, $id_nos_data, $id_nos_audit){
         if ($this->session->userdata('email')) {
             $data['title'] = 'Edit Audit';
             $data['header'] = 'temp/header';
             $data['content'] = 'nos/page-sub-item-edit';
-            $data['edit'] = $this->Nos_model->get_audit(decrypt_url($id_nos_data));
             $data['nos_data'] = $this->Nos_model->sub_item_detail(decrypt_url($id_nos_data));
-            $data['nos'] = $this->Nos_model->detail(decrypt_url($id_nos));
-            $data['target_nos'] = $this->Nos_model->target_nos($data['nos']['id_nos_target']);
-            $data['dealer'] = $this->Dealer_model->detail($data['nos']['id_dealer']);
-            $data['pic_nos'] = $this->Users_model->get_pic_nos();
-            $data['pic_dealer'] = $this->Users_model->getuserdealer($data['dealer']['id_dealer']);
-            $data['panel'] = $this->Panel_model->detail($data['dealer']['id_panel']);
+            $data['nos'] = $this->Nos_model->getNosComplete(decrypt_url($id_nos));
+            // var_dump($this->db->last_query());die();
+
+            $data['edit'] = $this->Nos_model->getAudit(decrypt_url($id_nos_audit));
+            // var_dump($data['nos']);die();
+            
+            $data['pic_nos'] = $this->Nos_model->getPicNos($data['nos']['id_dealer']);
+            $id_sub = explode(',', $data['nos']['id_panel_sub']);
+            $data['persentase'] = $this->persentaseTotalNos($id_sub);
             $data['sub_panel'] = $this->Nos_model->detail_sub_panel(decrypt_url($id_panel_sub));
             $this->load->view('layout', $data);
         } else {
@@ -252,16 +242,11 @@ class Nos extends CI_Controller
             $data['title'] = 'Detail';
             $data['header'] = 'temp/header';
             $data['content'] = 'nos/page-detail';
-            $data['nos'] = $this->Nos_model->detail(decrypt_url($id_nos));
-            $data['target_nos'] = $this->Nos_model->target_nos($data['nos']['id_nos_target']);
-            $data['dealer'] = $this->Dealer_model->detail($data['nos']['id_dealer']);
-            $data['pic_dealer'] = $this->Users_model->getuserdealer($data['dealer']['id_dealer']);
-            $data['panel'] = $this->Panel_model->detail($data['dealer']['id_panel']);
-            $id_panel_sub = explode(',', $data['panel']['id_panel_sub']);
+            $data['nos'] = $this->Nos_model->getNosComplete(decrypt_url($id_nos));
+            $id_panel_sub = explode(',', $data['nos']['id_panel_sub']);
             $data['sub_panel'] = $this->db->where_in('id_panel_sub', $id_panel_sub)->get('panel_sub')->result_array();
             $data['persentase'] = $this->persentaseTotalNos($id_panel_sub);
-            $data['nos_data'] = $this->Nos_model->mot($id_panel_sub);
-            $data['pic_dealer'] = $this->Nos_model->pic_dealer();
+            $data['nos_data'] = $this->Nos_model->mot($data['nos']['id_dealer'], $id_panel_sub);
             $data['komentar_mot'] = $this->Nos_model->komentar_mot();
             $data['komentar_nos'] = $this->Nos_model->komentar_nos(decrypt_url($id_nos));
             $this->load->view('layout', $data);
@@ -278,14 +263,14 @@ class Nos extends CI_Controller
             $data['title'] = 'Detail';
             $data['header'] = 'temp/header';
             $data['content'] = 'nos/page-detail-mot';
-            $data['nos'] = $this->Nos_model->detail(decrypt_url($id_nos));
-            $data['nos_data'] = $this->Nos_model->detail_mot($url);
-            $data['target_nos'] = $this->Nos_model->target_nos($data['nos']['id_nos_target']);
-            $data['dealer'] = $this->Dealer_model->detail($data['nos']['id_dealer']);
-            $data['pic_dealer'] = $this->Users_model->getuserdealer($data['dealer']['id_dealer']);
-            $data['panel'] = $this->Panel_model->detail($data['dealer']['id_panel']);
-            $id_panel_sub = explode(',', $data['panel']['id_panel_sub']);
+            $data['nos'] = $this->Nos_model->getNosComplete(decrypt_url($id_nos));
+            // echo "<pre>"; var_dump($data['nos']);die();
+
+            $data['nos_data'] = $this->Nos_model->detail_mot($data['nos']['id_dealer'], $url);
+
+            $id_panel_sub = explode(',', $data['nos']['id_panel_sub']);
             $data['sub_panel'] = $this->db->where_in('id_panel_sub', $id_panel_sub)->get('panel_sub')->result_array();
+            $data['persentase'] = $this->persentaseTotalNos($id_panel_sub);
             $this->load->view('layout', $data);
         } else {
             $this->session->set_flashdata('message', 'Anda harus Login terlebih dahulu!');
@@ -307,20 +292,28 @@ class Nos extends CI_Controller
 
     public function insert()
     {
-        $data = array();
-        $this->form_validation->set_rules('id_dealer','Dealer','required');
-        $this->form_validation->set_rules('id_user','PIC Dealer','required');
-        $this->form_validation->set_rules('id_nos_target[]','Target','required');
-        $this->form_validation->set_rules('hasil_sebelumnya[]','Hasil Nos','required');
+        $check_nos = $this->Nos_model->checkNosByDealer($this->input->post('id_dealer'));
 
-        if($this->form_validation->run() != false){
-            $this->Nos_model->insert();
-            $data['success'] = true;
-            $data['msg'] = 'Data berhasil di tambahkan!';
+        if(empty($check_nos)){
+            $data = array();
+            $this->form_validation->set_rules('id_dealer','Dealer','required');
+            $this->form_validation->set_rules('id_user','PIC Dealer','required');
+            $this->form_validation->set_rules('id_nos_target[]','Target','required');
+            $this->form_validation->set_rules('hasil_sebelumnya[]','Hasil Nos','required');
+    
+            if($this->form_validation->run() != false){
+                $this->Nos_model->insert();
+                $data['success'] = true;
+                $data['msg'] = 'Data berhasil di tambahkan!';
+            }else{
+                $data['success'] = false;
+                $data['error'] = validation_errors();
+            }
         }else{
             $data['success'] = false;
-            $data['error'] = validation_errors();
+            $data['error'] = 'Gagal, Dealer tersebut telah tersedia.';
         }
+        
         echo json_encode($data);
     }
 

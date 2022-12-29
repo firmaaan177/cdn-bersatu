@@ -143,7 +143,7 @@ class Powerbi_model extends CI_Model
         if(!empty($id_dealer)){
             $this->db->or_like('powerbi.id_dealer', $id_dealer,'both');
         }
-        if(!in_array($this->session->userdata('id_user'), explode(",",LEVEL_AKSES_ADMIN))){
+        if(!in_array($this->session->userdata('level'), explode(",",LEVEL_AKSES_ADMIN))){
             $this->db->or_like('powerbi.id_user', $id_user, 'both');
         }
         $this->db->join('powerbi_kategori', 'powerbi_kategori.id_powerbi_kategori = powerbi.id_powerbi_kategori','left');

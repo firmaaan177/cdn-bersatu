@@ -66,6 +66,7 @@
                                 <th width="10">No.</th>
                                 <th width="10"></th>
                                 <th>Dealer</th>
+                                <th>Regional</th>
                                 <th>Nilai Nos Sebelumnya</th>
                                 <th>Status</th>
                             </tr>

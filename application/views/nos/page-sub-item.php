@@ -3,17 +3,16 @@
         <button onclick="history.back()" class="btn btn-sm btn-danger"><i class="uil-angle-left"></i> Kembali</button>
     </div>
     <div class="col-md-10 align-self-center">
-        <h4><?= $dealer['nama_dealer'] ?></h4>
-        <p>Kacab : <?= $pic_dealer['nama'] ?> | Telp/Wa : <?= $pic_dealer['nohp'] ?></p>
+        <h4><?= $nos['nama_dealer'] ?></h4>
+        <p>Kacab : <?= $nos['nama'] ?> | Telp/Wa : <?= $nos['nohp'] ?></p>
     </div>
     <div class="col-md-2">
         <div class="card border border-primary">
             <div class="card-body text-center">
                 <h3 class="mt-0 text-primary"><?= number_format($persentase, 2) ?>%</h3>
-                <p class="card-text">Target Hasil <strong><?= $target_nos['nama_target'] ?></strong></p>
+                <p class="card-text">Target Hasil <strong><?= $nos['nama_target'] ?></strong></p>
             </div>
         </div>
-        
     </div>
     <hr>
     <div class="col-md-12">
@@ -21,14 +20,14 @@
         <p>Terdiri dari <?= count($nos_data) ?> Sub Item NOS</p>
     </div>
 	<?php foreach($nos_data as $row) { 
-    $check_audit = $this->db->where('id_nos_data', $row['id_nos_data'])->where('YEAR(due_date)', $year)->where('id_nos', $id_nos)->get('nos_audit')->row_array();
+        $check_audit = $this->db->where('id_nos_data', $row['id_nos_data'])->where('YEAR(due_date)', $year)->where('id_nos', $id_nos)->get('nos_audit')->row_array();
     ?>
 		<div class="col-lg-6">
 			<div class="card card-body p-3">
                 <?php if(empty($check_audit)) { ?>
 				    <a href="<?= base_url() ?>nos/sub_item_detail/<?= encrypt_url($nos['id_nos']) ?>/<?= encrypt_url($row['id_panel_sub']) ?>/<?= encrypt_url($row['id_nos_data']) ?>">
                 <?php }else{ ?>
-				    <a href="<?= base_url() ?>nos/sub_item_edit/<?= encrypt_url($nos['id_nos']) ?>/<?= encrypt_url($row['id_panel_sub']) ?>/<?= encrypt_url($row['id_nos_data']) ?>">
+				    <a href="<?= base_url() ?>nos/sub_item_edit/<?= encrypt_url($nos['id_nos']) ?>/<?= encrypt_url($row['id_panel_sub']) ?>/<?= encrypt_url($row['id_nos_data']) ?>/<?= encrypt_url($check_audit['id_nos_audit']) ?>">
                 <?php } ?>
                     <div class="row">
                         <div class="col-md-10 align-self-center">

@@ -125,7 +125,7 @@ class Dealer_model extends CI_Model
 
     public function getDealerbyuser(){
         $this->db->join('user','user.id_dealer = dealer.id_dealer','left');
-        $this->db->where('level', 5);
+        $this->db->where('level', 6);
         $this->db->order_by('dealer.nama_dealer', 'asc');
         $this->db->group_by('dealer.id_dealer');
         return $this->db->get('dealer')->result_array();

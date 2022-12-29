@@ -124,9 +124,9 @@ class Auth extends CI_Controller
 					'nama_level' => $user_level['nama_level'],
 					'image' => $user['image'],
 					'status' => $user['status'],
-					'id_dealer' => $regional['id_dealer'],
-					'id_regional' => $regional['id_regional'],
-					'nama_regional' => $regional['nama_regional'],
+					'id_dealer' => !empty($regional['id_dealer']) ? $regional['id_dealer'] : '',
+					'id_regional' => !empty($regional['id_regional']) ? $regional['id_regional'] : 'all',
+					'nama_regional' => !empty($regional['nama_regional']) ? $regional['nama_regional'] : '',
 				];
 				$this->session->set_userdata($session);
 				if ($user['status'] == '1') {

@@ -121,7 +121,7 @@ class Nos_model extends CI_Model
         if(!empty($id_dealer)){
             $this->db->where('id_dealer', $id_dealer);
         }
-        $this->db->where('level', PIC_DEALER);
+        $this->db->where('level', SPV_NOS);
         $this->db->order_by('nama', 'desc');
         return $this->db->get('user')->result_array();
     }

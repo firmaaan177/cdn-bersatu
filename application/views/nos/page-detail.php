@@ -145,7 +145,7 @@
                                             <span style="font-size:20px;" class="fas fa-lock text-danger"></span>
                                         <?php }else{?>
                                             <?php if($this->session->userdata('level') != 5){ ?>
-                                                <button type="button" class="btn btn-success btn-round btn-sm lock" mot="<?= $row['mot']?>"><i class="fas fa-lock"></i></button>
+                                                <button type="button" class="btn btn-success btn-round btn-sm lock" mot="<?= $row['mot']?>" id_dealer="<?= $row['id_audit_dealer']?>"><i class="fas fa-lock"></i></button>
                                             <?php }else{ ?>
                                                 <span style="font-size:20px;" class="uil-times-circle text-danger"></span>
                                             <?php } ?>
@@ -226,6 +226,7 @@
             <div class="modal-body">
                 <form method="post" id="insert_comment_nos" enctype="multipart/form-data" novalidate>
                     <input type="hidden" name="mot" id="mot">
+                    <input type="hidden" name="id_dealer" id="id_dealer" value="<?= $id_dealer ?>">
                     <div class="row">
                         <div class="form-group mb-3 col-md-12">
                             <label for="">Komentar <span class="text-danger">*</span></label>
@@ -248,6 +249,7 @@
         // SAVE
         $("tbody").on("click", '.lock', function() {
             var mot = $(this).attr('mot');
+            var id_dealer = $(this).attr('id_dealer');
             var is_lock = 1;
             Swal.fire({
                 title: 'Apakah anda yakin?',
@@ -261,10 +263,11 @@
             }).then((result) => {
                 if (result.isConfirmed) {
                     $.ajax({
-                        url: '<?= base_url() ?>nos/lock_nos',
+                        url: '<?= base_url() ?>nos/lock_nos/'+ id_dealer,
                         type: "POST",
                         data : {
                             mot : mot,
+                            id_dealer : id_dealer,
                             is_lock : is_lock
                         },
                         dataType: 'json',

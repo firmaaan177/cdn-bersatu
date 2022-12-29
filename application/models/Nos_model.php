@@ -131,6 +131,7 @@ class Nos_model extends CI_Model
         if(!empty($id_dealer)){
             $this->db->where('nos_audit.id_dealer', $id_dealer);
         }
+        $this->db->select('*, nos_audit.id_dealer as id_audit_dealer');
         $this->db->join('nos_data','nos_data.id_nos_data = nos_audit.id_nos_data','left');
         $this->db->join('nos_comment','nos_comment.id_nos_audit = nos_audit.id_nos_audit','left');
         $this->db->where_in('nos_data.id_panel_sub', $id_panel_sub);
@@ -379,7 +380,7 @@ class Nos_model extends CI_Model
         return;
     }
 
-    public function lock_nos()
+    public function lock_nos($id_dealer='')
     {
         $nos_data = $this->db->where('mot', $this->input->post('mot'))->get('nos_data')->result_array();
         $data = array();
@@ -391,26 +392,29 @@ class Nos_model extends CI_Model
                 'edited_by' => $this->session->userdata('id_user'),
             );
         }
-        $this->db->where('id_dealer', $this->session->userdata('id_dealer'));
+        if(!empty($id_dealer)){
+            $this->db->where('id_dealer', $id_dealer);
+        }
         $this->db->where('YEAR(due_date)', date('Y'));
         $this->db->update_batch('nos_audit', $data, 'id_nos_data');
         return;
     }
 
-    public function nos_by_mot($mot){
+    public function nos_by_mot($id_dealer, $mot){
         $this->db->join('nos_data','nos_data.id_nos_data = nos_audit.id_nos_data','left');
         $this->db->where('nos_data.mot', $mot);
+        $this->db->where('nos_audit.id_dealer', $id_dealer);
         return $this->db->get('nos_audit')->result_array();
     }
 
     public function add_comment()
     {
-        $nos_data = $this->nos_by_mot($this->input->post('mot'));
+        $nos_data = $this->nos_by_mot($this->input->post('id_dealer'), $this->input->post('mot'));
         $data = array();
         foreach ($nos_data as $row) {
             $data[] = array(
                 'id_nos_audit' => $row['id_nos_audit'],
-                'id_dealer' => $this->session->userdata('id_dealer'),
+                'id_dealer' => $this->input->post('id_dealer'),
                 'komentar' => $this->input->post('komentar'),
                 'created_by' => $this->session->userdata('id_user'),
                 'created_date' => date("Y-m-d H:i:s"),

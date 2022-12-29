@@ -243,10 +243,13 @@ class Nos extends CI_Controller
             $data['header'] = 'temp/header';
             $data['content'] = 'nos/page-detail';
             $data['nos'] = $this->Nos_model->getNosComplete(decrypt_url($id_nos));
+            $data['id_dealer'] = $data['nos']['id_dealer'];
             $id_panel_sub = explode(',', $data['nos']['id_panel_sub']);
             $data['sub_panel'] = $this->db->where_in('id_panel_sub', $id_panel_sub)->get('panel_sub')->result_array();
             $data['persentase'] = $this->persentaseTotalNos($id_panel_sub);
             $data['nos_data'] = $this->Nos_model->mot($data['nos']['id_dealer'], $id_panel_sub);
+            // echo "<pre>"; var_dump($data['nos_data']);die();
+            // var_dump($this->db->last_query());die();
             $data['komentar_mot'] = $this->Nos_model->komentar_mot($data['nos']['id_dealer']);
             $data['komentar_nos'] = $this->Nos_model->komentar_nos(decrypt_url($id_nos));
             $this->load->view('layout', $data);
@@ -264,9 +267,9 @@ class Nos extends CI_Controller
             $data['header'] = 'temp/header';
             $data['content'] = 'nos/page-detail-mot';
             $data['nos'] = $this->Nos_model->getNosComplete(decrypt_url($id_nos));
-            // echo "<pre>"; var_dump($data['nos']);die();
 
             $data['nos_data'] = $this->Nos_model->detail_mot($data['nos']['id_dealer'], $url);
+            // echo "<pre>"; var_dump($data['nos']);die();
 
             $id_panel_sub = explode(',', $data['nos']['id_panel_sub']);
             $data['sub_panel'] = $this->db->where_in('id_panel_sub', $id_panel_sub)->get('panel_sub')->result_array();
@@ -438,8 +441,8 @@ class Nos extends CI_Controller
         echo json_encode($data);
     }
 
-    public function lock_nos(){
-        $this->Nos_model->lock_nos();
+    public function lock_nos($id_dealer=''){
+        $this->Nos_model->lock_nos($id_dealer);
 		$data['success'] = true;
         $data['msg'] = 'Data berhasil di LOCK!';
         echo json_encode($data);

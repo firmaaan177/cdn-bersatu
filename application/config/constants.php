@@ -85,5 +85,5 @@ defined('EXIT__AUTO_MIN')      or define('EXIT__AUTO_MIN', 9); // lowest automat
 defined('EXIT__AUTO_MAX')      or define('EXIT__AUTO_MAX', 125); // highest automatically-assigned error code
 
 define("LEVEL_AKSES_ADMIN", "1,4,7");
-define("PIC_NOS", "6");
+define("PIC_DEALER", "5");
 

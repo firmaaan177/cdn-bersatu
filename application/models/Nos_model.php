@@ -195,23 +195,25 @@ class Nos_model extends CI_Model
         return $this->db->get('nos_data')->row_array();
     }
 
-    public function komentar_mot(){
+    public function komentar_mot($id_dealer=''){
+        if(!empty($id_dealer)){
+            $this->db->where('nos_comment.id_dealer', $id_dealer);
+        }
         $this->db->join('nos_audit','nos_audit.id_nos_audit = nos_comment.id_nos_audit','left');
         $this->db->join('nos_data','nos_data.id_nos_data = nos_audit.id_nos_data','left');
         $this->db->join('user','user.id_user = nos_comment.created_by','left');
         $this->db->join('user_level','user_level.id_level = user.level','left');
         $this->db->where('YEAR(due_date)', date('Y'));
         $this->db->where('komentar IS NOT NULL');
-        $this->db->where('nos_comment.id_dealer', $this->session->userdata('id_dealer'));
         $this->db->group_by('nos_comment.komentar');
         return $this->db->get('nos_comment')->result_array();
     }
 
     public function komentar_nos($id_nos){
+        $this->db->select('*, comment.created_date as tgl_komentar');
         $this->db->join('user','user.id_user = comment.created_by','left');
         $this->db->join('user_level','user_level.id_level = user.level','left');
         $this->db->where('comment.id_nos', $id_nos);
-        $this->db->where('comment.id_dealer', $this->session->userdata('id_dealer'));
         $this->db->order_by('comment.id_comment','desc');
         return $this->db->get('comment')->result_array();
     }
@@ -423,7 +425,6 @@ class Nos_model extends CI_Model
     {
         $data = array(
             'id_nos' => $this->input->post('id_nos'),
-            'id_dealer' => $this->session->userdata('id_dealer'),
             'komentar' => $this->input->post('komentar'),
             'created_by' => $this->session->userdata('id_user'),
             'created_date' => date("Y-m-d H:i:s"),

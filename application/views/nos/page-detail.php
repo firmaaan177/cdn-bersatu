@@ -196,13 +196,12 @@
                             <button type="button" class="btn btn-primary" id="send">Kirim <i class="uil-arrow-right mr-1"></i></button>
                         </div>
                     </form>
-
                     <?php foreach($komentar_nos as $row) { ?>
                         <div class="d-flex align-items-start mb-2">
                             <img class="d-flex me-3 rounded-circle avatar-sm" src="<?= base_url(); ?>assets/img/foto_anggota/<?= $row['image'] ?>">
                             <div class="flex-1">
                                 <h5 class="font-size-14 my-1"><?= $row['nama'] ?> - <?= $row['nama_level'] ?></h5>
-                                <small class="text-muted"><?= date('d/m/Y - H:i', strtotime($row['created_date'])) ?></small>
+                                <small class="text-muted"><?= date('d/m/Y - H:i', strtotime($row['tgl_komentar'])) ?></small>
                             </div>
                         </div>
                         <div class="box-comment">

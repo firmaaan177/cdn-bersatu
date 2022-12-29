@@ -247,7 +247,7 @@ class Nos extends CI_Controller
             $data['sub_panel'] = $this->db->where_in('id_panel_sub', $id_panel_sub)->get('panel_sub')->result_array();
             $data['persentase'] = $this->persentaseTotalNos($id_panel_sub);
             $data['nos_data'] = $this->Nos_model->mot($data['nos']['id_dealer'], $id_panel_sub);
-            $data['komentar_mot'] = $this->Nos_model->komentar_mot();
+            $data['komentar_mot'] = $this->Nos_model->komentar_mot($data['nos']['id_dealer']);
             $data['komentar_nos'] = $this->Nos_model->komentar_nos(decrypt_url($id_nos));
             $this->load->view('layout', $data);
         } else {

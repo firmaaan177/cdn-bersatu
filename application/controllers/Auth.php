@@ -125,7 +125,7 @@ class Auth extends CI_Controller
 					'image' => $user['image'],
 					'status' => $user['status'],
 					'id_dealer' => !empty($regional['id_dealer']) ? $regional['id_dealer'] : '',
-					'id_regional' => !empty($regional['id_regional']) ? $regional['id_regional'] : 'all',
+					'id_regional' => !empty($regional['id_regional']) ? $regional['id_regional'] : '0',
 					'nama_regional' => !empty($regional['nama_regional']) ? $regional['nama_regional'] : '',
 				];
 				$this->session->set_userdata($session);
@@ -192,7 +192,7 @@ class Auth extends CI_Controller
 	}
 
 	public function setSessions($session = ''){
-		if($session == 'all'){
+		if($session == 0){
 			$data['id_regional'] = $this->session->set_userdata('id_regional', 0);
 			$data['nama_regional'] = $this->session->set_userdata('nama_regional', 'Semua Regional');
 		}else{

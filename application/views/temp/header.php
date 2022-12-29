@@ -111,7 +111,7 @@ if($this->session->userdata('level') == 5){
 						</button>
 						<div class="dropdown-menu dropdown-menu-end">
 							<!-- item-->
-							<a class="dropdown-item set-regional" href="#" id-regional="all"><i class="uil uil-map-marker-alt font-size-14 align-middle text-muted me-1"></i>
+							<a class="dropdown-item set-regional" href="#" id-regional="0"><i class="uil uil-map-marker-alt font-size-14 align-middle text-muted me-1"></i>
 								<span class="align-middle">Semua Regional</span></a>
 							<?php foreach($regional as $row) { ?>
 								<a class="dropdown-item set-regional" href="#" id-regional="<?= $row['id_regional'] ?>"><i class="uil uil-map-marker-alt font-size-14 align-middle text-muted me-1"></i>

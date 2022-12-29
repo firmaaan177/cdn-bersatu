@@ -15,6 +15,7 @@
         </div>
         
     </div>
+    <?= $this->session->userdata('id_dealer') ?>
 	<?php foreach($sub_panel as $row) { ?>
 		<div class="col-lg-4">
 			<div class="card card-body">

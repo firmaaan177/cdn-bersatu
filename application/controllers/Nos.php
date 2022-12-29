@@ -19,7 +19,7 @@ class Nos extends CI_Controller
     {
         if(!in_array($this->session->userdata('level'), explode(",",LEVEL_AKSES_ADMIN))){
             $this->db->where('nos.id_dealer', $this->session->userdata('id_dealer'));
-        }else if($this->session->userdata('id_regional') != 'all' && in_array($this->session->userdata('level'), explode(",",LEVEL_AKSES_ADMIN))){
+        }else if($this->session->userdata('id_regional') != 0 && in_array($this->session->userdata('level'), explode(",",LEVEL_AKSES_ADMIN))){
             $this->db->where('regional.id_regional', $this->session->userdata('id_regional'));
         }
         $list = $this->Nos_model->get_datatables();
@@ -144,8 +144,13 @@ class Nos extends CI_Controller
         if ($this->session->userdata('email')) {
             $data['title'] = 'Daftar Panel';
             $data['header'] = 'temp/header';
-            $data['content'] = 'nos/page-panel';
             $data['nos'] = $this->Nos_model->getNosComplete(decrypt_url($id_nos));
+            $data['id_dealer'] = $data['nos']['id_regional'];
+            if($this->session->userdata('id_regional') == 0 || $this->session->userdata('id_regional') == $data['nos']['id_regional']){
+                $data['content'] = 'nos/page-panel';
+            }else{
+                $data['content'] = '404';
+            }
             $id_panel_sub = explode(',', $data['nos']['id_panel_sub']);
             $data['sub_panel'] = $this->Nos_model->getPanelSub($id_panel_sub)->result_array();
             $data['persentase'] = $this->persentaseTotalNos($id_panel_sub);
@@ -161,9 +166,13 @@ class Nos extends CI_Controller
             $data['id_nos'] = decrypt_url($id_nos);
             $data['title'] = 'Daftar Item';
             $data['header'] = 'temp/header';
-            $data['content'] = 'nos/page-item';
             $data['nos_data'] = $this->Nos_model->getItemNosData(decrypt_url($id_panel_sub));
             $data['nos'] = $this->Nos_model->getNosComplete(decrypt_url($id_nos));
+            if($this->session->userdata('id_regional') == 0 || $this->session->userdata('id_regional') == $data['nos']['id_regional']){
+                $data['content'] = 'nos/page-item';
+            }else{
+                $data['content'] = '404';
+            }
             $id_sub = explode(',', $data['nos']['id_panel_sub']);
             $data['persentase'] = $this->persentaseTotalNos(decrypt_url($id_nos), $id_sub);
             $data['sub_panel'] = $this->Nos_model->getPanelSub(decrypt_url($id_panel_sub))->row_array();
@@ -182,9 +191,13 @@ class Nos extends CI_Controller
             $data['id_nos'] = decrypt_url($id_nos);
             $data['title'] = 'Daftar Sub Item';
             $data['header'] = 'temp/header';
-            $data['content'] = 'nos/page-sub-item';
             $data['nos_data'] = $this->Nos_model->sub_item($url);
             $data['nos'] = $this->Nos_model->getNosComplete(decrypt_url($id_nos));
+            if($this->session->userdata('id_regional') == 0 || $this->session->userdata('id_regional') == $data['nos']['id_regional']){
+                $data['content'] = 'nos/page-sub-item';
+            }else{
+                $data['content'] = '404';
+            }
             $id_sub = explode(',', $data['nos']['id_panel_sub']);
             $data['persentase'] = $this->persentaseTotalNos($id_sub);
             $data['sub_panel'] = $this->Nos_model->detail_sub_panel(decrypt_url($id_panel_sub));
@@ -200,9 +213,13 @@ class Nos extends CI_Controller
         if ($this->session->userdata('email')) {
             $data['title'] = 'Daftar Sub Item';
             $data['header'] = 'temp/header';
-            $data['content'] = 'nos/page-sub-item-detail';
             $data['nos_data'] = $this->Nos_model->sub_item_detail(decrypt_url($id_nos_data));
             $data['nos'] = $this->Nos_model->getNosComplete(decrypt_url($id_nos));
+            if($this->session->userdata('id_regional') == 0 || $this->session->userdata('id_regional') == $data['nos']['id_regional']){
+                $data['content'] = 'nos/page-sub-item-detail';
+            }else{
+                $data['content'] = '404';
+            }
             $data['pic_nos'] = $this->Nos_model->getPicNos($data['nos']['id_dealer']);
             $id_sub = explode(',', $data['nos']['id_panel_sub']);
             $data['persentase'] = $this->persentaseTotalNos($id_sub);
@@ -218,9 +235,13 @@ class Nos extends CI_Controller
         if ($this->session->userdata('email')) {
             $data['title'] = 'Edit Audit';
             $data['header'] = 'temp/header';
-            $data['content'] = 'nos/page-sub-item-edit';
             $data['nos_data'] = $this->Nos_model->sub_item_detail(decrypt_url($id_nos_data));
             $data['nos'] = $this->Nos_model->getNosComplete(decrypt_url($id_nos));
+            if($this->session->userdata('id_regional') == 0 || $this->session->userdata('id_regional') == $data['nos']['id_regional']){
+                $data['content'] = 'nos/page-sub-item-edit';
+            }else{
+                $data['content'] = '404';
+            }
             // var_dump($this->db->last_query());die();
 
             $data['edit'] = $this->Nos_model->getAudit(decrypt_url($id_nos_audit));
@@ -243,6 +264,11 @@ class Nos extends CI_Controller
             $data['header'] = 'temp/header';
             $data['content'] = 'nos/page-detail';
             $data['nos'] = $this->Nos_model->getNosComplete(decrypt_url($id_nos));
+            if($this->session->userdata('id_regional') == 0 || $this->session->userdata('id_regional') == $data['nos']['id_regional']){
+                $data['content'] = 'nos/page-detail';
+            }else{
+                $data['content'] = '404';
+            }
             $data['id_dealer'] = $data['nos']['id_dealer'];
             $id_panel_sub = explode(',', $data['nos']['id_panel_sub']);
             $data['sub_panel'] = $this->db->where_in('id_panel_sub', $id_panel_sub)->get('panel_sub')->result_array();
@@ -267,7 +293,11 @@ class Nos extends CI_Controller
             $data['header'] = 'temp/header';
             $data['content'] = 'nos/page-detail-mot';
             $data['nos'] = $this->Nos_model->getNosComplete(decrypt_url($id_nos));
-
+            if($this->session->userdata('id_regional') == 0 || $this->session->userdata('id_regional') == $data['nos']['id_regional']){
+                $data['content'] = 'nos/page-detail-mot';
+            }else{
+                $data['content'] = '404';
+            }
             $data['nos_data'] = $this->Nos_model->detail_mot($data['nos']['id_dealer'], $url);
             // echo "<pre>"; var_dump($data['nos']);die();
 

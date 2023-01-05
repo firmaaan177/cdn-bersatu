@@ -264,6 +264,7 @@ class Nos extends CI_Controller
             $data['header'] = 'temp/header';
             $data['content'] = 'nos/page-detail';
             $data['nos'] = $this->Nos_model->getNosComplete(decrypt_url($id_nos));
+            // var_dump($data['nos']);die();
             if($this->session->userdata('id_regional') == 0 || $this->session->userdata('id_regional') == $data['nos']['id_regional']){
                 $data['content'] = 'nos/page-detail';
             }else{
@@ -426,6 +427,7 @@ class Nos extends CI_Controller
     {
         $data = array();
         $this->form_validation->set_rules('id_nos_audit','Text','required');
+        $this->form_validation->set_rules('keterangan','Keterangan','required');
 
         $config['upload_path']="./upload/perbaikan";
 		$config['allowed_types']='jpg|png|jpeg|JPEG';

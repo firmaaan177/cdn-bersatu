@@ -11,6 +11,7 @@ class User extends CI_Controller {
 		}
 		$this->load->model('Users_model');
 		$this->load->model('Dealer_model');
+		$this->load->model('Regional_model');
 	}
 
 	//user
@@ -29,6 +30,7 @@ class User extends CI_Controller {
 		$data['content'] = 'user/add-user';
 		$data['level'] = $this->db->get('user_level')->result_array();
 		$data['dealer'] = $this->Dealer_model->getDealer();
+		$data['regional'] = $this->Regional_model->getRegional();
 		$this->load->view('layout', $data);
 	}
 

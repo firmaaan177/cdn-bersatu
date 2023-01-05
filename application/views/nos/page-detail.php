@@ -79,7 +79,7 @@
         <div class="card">
             <div class="card-body">
                 <div class="table-responsive">
-                    <table class="table table-bordered table-striped table-hover">
+                    <table class="table table-bordered table-striped table-hover" id="datatables">
                         <thead>
                             <tr>
                                 <th colspan="2" class="bg-secondary text-white">MOT</th>
@@ -154,7 +154,7 @@
                                 </tr>
                                 <?php } ?>
                             <?php }else { ?>
-                            <tr><td colspan="4" class="text-center">Data tidak ditemukan.</td></tr>
+                                <tr><td colspan="4" class="text-center">Data tidak ditemukan.</td></tr>
                             <?php } ?>
                         </tbody>
                     </table>
@@ -246,6 +246,8 @@
 
 <script>
     $(document).ready(function() {
+        $('#datatables').DataTable();
+
         // SAVE
         $("tbody").on("click", '.lock', function() {
             var mot = $(this).attr('mot');

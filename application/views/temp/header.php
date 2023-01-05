@@ -45,6 +45,7 @@ if($this->session->userdata('level') == 5){
 	<link rel="stylesheet" href="<?= base_url(); ?>assets/libs/chenfengyuan/datepicker/datepicker.min.css">
 	<link rel="stylesheet" type="text/css" href="<?= base_url(); ?>assets/libs/toastr/build/toastr.min.css">
 	<link href="<?= base_url(); ?>assets/css/app.min.css" id="app-style" rel="stylesheet" type="text/css" />
+	<link href="<?= base_url(); ?>assets/libs/magnific-popup/magnific-popup.css" rel="stylesheet" type="text/css">
 
 	<!-- Bootstrap Css -->
 	<link href="<?= base_url(); ?>assets/css/bootstrap.min.css" id="bootstrap-style" rel="stylesheet" type="text/css" />

@@ -26,13 +26,17 @@
 <?php } ?>
 
 <div class="row" id="load">
-	<?php foreach($powerbi as $row) { ?>
-		<div class="col-lg-4">
-			<div class="card card-body">
-				<a href="<?= base_url() ?>dashboard/powerbi/<?= encrypt_url($row['id_powerbi']) ?> "><h4 class="card-title"><i class="uil-chart-bar text-primary me-2"></i><?= $row['nama_kategori'] ?> <span class="badge rounded-pill bg-primary font-size-12"><?= $row['nama_regional'] ?></span></h4></a> 
-				<p class="card-text"><?= word_limiter($row['deskripsi'], 20) ?></p>
+	<?php if(!empty($powerbi)) { ?>
+		<?php foreach($powerbi as $row) { ?>
+			<div class="col-lg-4">
+				<div class="card card-body">
+					<a href="<?= base_url() ?>dashboard/powerbi/<?= encrypt_url($row['id_powerbi']) ?> "><h4 class="card-title"><i class="uil-chart-bar text-primary me-2"></i><?= $row['nama_kategori'] ?> <span class="badge rounded-pill bg-primary font-size-12"><?= $row['nama_regional'] ?></span></h4></a> 
+					<p class="card-text"><?= word_limiter($row['deskripsi'], 20) ?></p>
+				</div>
 			</div>
-		</div>
+	<?php } ?>
+	<?php }else{ ?>
+		<h5>Data tidak ditemukan.</h5>
 	<?php } ?>
 </div>
 

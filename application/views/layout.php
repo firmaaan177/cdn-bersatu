@@ -99,6 +99,11 @@
 <script src="<?= base_url(); ?>assets/libs/waypoints/lib/jquery.waypoints.min.js"></script>
 <script src="<?= base_url(); ?>assets/js/sweetalert.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
+<!-- Magnific Popup-->
+<script src="<?= base_url(); ?>assets/libs/magnific-popup/jquery.magnific-popup.min.js"></script>
+
+<!-- lightbox init js-->
+<script src="<?= base_url(); ?>assets/js/pages/lightbox.init.js"></script>
 
 <script src="<?= base_url(); ?>assets/js/app.js"></script>
 

@@ -25,7 +25,11 @@ class Dashboard extends CI_Controller
 				$id_regional = $this->session->userdata('id_regional');
 			}
 			$data['title'] = 'Dashboard';
-            $data['powerbi'] = $this->Powerbi_model->getPowerBi($id_regional,$this->session->userdata('id_dealer'), $this->session->userdata('id_user'));
+			if($this->session->userdata('level') == 5){
+				$data['powerbi'] = $this->Powerbi_model->getPowerBi('',$this->session->userdata('id_dealer'), $this->session->userdata('id_user'));
+			}else{
+				$data['powerbi'] = $this->Powerbi_model->getPowerBi($id_regional,$this->session->userdata('id_dealer'), $this->session->userdata('id_user'));
+			}
 			// var_dump($this->db->last_query());die();
 			$data['log_login'] = $this->Dashboard_model->log_login();
 			$data['regional'] = $this->Regional_model->getRegional();

@@ -113,7 +113,12 @@ class Auth extends CI_Controller
 		$password = md5($this->input->post('password'));
 		$user = $this->db->query("SELECT * FROM user where email ='$email'")->row_array();
 		$user_level = $this->db->query("SELECT * FROM user_level where id_level ='".$user['level']."'")->row_array();
-		$regional = $this->Users_model->getRegional($user['id_user']);
+		$regional_dealer = $this->Users_model->getRegional($user['id_user']);
+		if(!empty($regional_dealer)){
+			$regional = $this->Users_model->getRegional($user['id_user']);
+		}else{
+			$regional = $this->db->where('id_regional', $user['id_regional'])->get('regional')->row_array();
+		}
 		if ($user) {
 			if ($password == $user['password']) {
 				$session = [

@@ -155,7 +155,7 @@ class Powerbi_model extends CI_Model
     public function getPowerBiForFilter($id_dealer ='')
     {
         if(!empty($id_dealer)){
-            $this->db->like('powerbi.id_dealer', $id_dealer,'both');
+            $this->db->where('powerbi.id_dealer', $id_dealer);
         }
         $this->db->join('powerbi_kategori', 'powerbi_kategori.id_powerbi_kategori = powerbi.id_powerbi_kategori','left');
         $this->db->join('regional', 'regional.id_regional = powerbi.id_regional','left');

@@ -92,9 +92,10 @@ class Nos_model extends CI_Model
         if(!empty($id_nos)){
             $this->db->where('nos.id_nos', $id_nos);
         }
-        // $this->db->select('nos.*');
+        $this->db->select('*, regional.id_regional, nos.id_dealer');
         $this->db->join('nos_target','nos_target.id_nos_target = nos.id_nos_target','left');
         $this->db->join('dealer','dealer.id_dealer = nos.id_dealer','left');
+        $this->db->join('regional','regional.id_regional = dealer.id_regional','left');
         $this->db->join('user','user.id_user = nos.id_user','left');
         $this->db->join('user_level','user_level.id_level = user.level','left');
         $this->db->join('panel','panel.id_panel = panel.id_panel','left');
@@ -308,6 +309,7 @@ class Nos_model extends CI_Model
     {
         $data = array(
             'id_nos_audit' => $this->input->post('id_nos_audit'),
+            'keterangan' => $this->input->post('keterangan'),
             'status' => 'pending',
             'id_dealer' => $this->session->userdata('id_dealer'),
             'foto' => $images,

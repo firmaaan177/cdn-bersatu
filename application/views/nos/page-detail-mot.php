@@ -259,8 +259,7 @@
                         data : {
                             id_nos_audit : id_nos_audit,
                             is_perbaikan : is_perbaikan,
-                            status : status,
-                            keterangan : keterangan,
+                            status : status
                         },
                         dataType: 'json',
                         success: function(data) {

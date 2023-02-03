@@ -21,7 +21,7 @@
         <p>Terdiri dari <?= count($nos_data) ?> item NOS</p>
     </div>
 	<?php foreach($nos_data as $row) { 
-    $item = $this->db->where('item', $row['item'])->get('nos_data')->result_array();
+    $item = $this->db->where('item', $row['item'])->group_by('sub_item_2')->get('nos_data')->result_array();
     $total_item = count($item);
     $total_audit = 0;
     foreach($item as $rows){

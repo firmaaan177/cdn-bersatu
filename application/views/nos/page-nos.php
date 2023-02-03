@@ -1,7 +1,6 @@
 <div class="row">
     <div class="col-md-12 mb-3">
         <button type="button" class="btn btn-success btn-sm" data-bs-toggle="modal" data-bs-target="#modalAdd"><i class="uil-plus mr-1"></i> Tambah Data</button>
-        <a href="<?= base_url(); ?>nos/import" type="button" class="btn btn-primary btn-sm"><i class="fa fa-upload mr-1"></i> Import Excel</a>
     </div>
     <div class="col-md-6 col-xl-3">
         <div class="card">

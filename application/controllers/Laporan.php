@@ -45,7 +45,7 @@ class Laporan extends CI_Controller
             $data['success'] = false;
             $data['error'] = validation_errors();
         }
-        echo json_encode($data);
+        // echo json_encode($data);
     }
 
     public function export_excel($year, $id_dealer=''){

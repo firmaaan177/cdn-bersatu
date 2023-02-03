@@ -39,6 +39,7 @@ class User extends CI_Controller {
 		$data['level'] = $this->db->get('user_level')->result_array();
 		$data['dealer'] = $this->Dealer_model->getDealer();
 		$data['detail'] = $this->Users_model->detail_user(decrypt_url($id));
+		$data['regional'] = $this->Regional_model->getRegional();
 		$data['title'] = 'Edit User';
 		$data['header'] = 'temp/header';
 		$data['content'] = 'user/edit-user';
@@ -86,7 +87,8 @@ class User extends CI_Controller {
             $row[] = $field->nama."<br>".$field->nohp;
             $row[] = $field->email;
             $row[] = $field->nama_level;
-            $row[] = $field->nama_dealer;
+            $row[] = $field->nama_regional ? $field->nama_regional : '-';
+            $row[] = $field->nama_dealer ? $field->nama_dealer : '-';
             $row[] = $status;
             $data[] = $row;
         }

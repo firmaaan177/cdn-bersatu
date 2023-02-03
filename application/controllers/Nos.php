@@ -192,6 +192,7 @@ class Nos extends CI_Controller
             $data['title'] = 'Daftar Sub Item';
             $data['header'] = 'temp/header';
             $data['nos_data'] = $this->Nos_model->sub_item($url);
+            // echo '<pre>'; var_dump($data['nos_data']);die();
             $data['nos'] = $this->Nos_model->getNosComplete(decrypt_url($id_nos));
             if($this->session->userdata('id_regional') == 0 || $this->session->userdata('id_regional') == $data['nos']['id_regional']){
                 $data['content'] = 'nos/page-sub-item';

@@ -12,6 +12,7 @@ class Users_model extends CI_Model
     {
         $this->db->select('*, user.status as status_user');
         $this->db->join('user_level','user_level.id_level = user.level','left');
+        $this->db->join('regional','regional.id_regional = user.id_regional','left');
         $this->db->join('dealer','dealer.id_dealer = user.id_dealer','left');
         $this->db->from('user');
 
@@ -70,6 +71,7 @@ class Users_model extends CI_Model
     public function simpan($images)
     {
         $data = [
+            "id_regional" => $this->input->post('id_regional'),
             "id_dealer" => $this->input->post('id_dealer'),
             "password" => md5($this->input->post('password')),
             "email" => $this->input->post('email'),
@@ -88,6 +90,7 @@ class Users_model extends CI_Model
     public function edit($images, $id_user)
     {
         $data = [
+            "id_regional" => $this->input->post('id_regional'),
             "id_dealer" => $this->input->post('id_dealer'),
             "email" => $this->input->post('email'),
             "nama" => $this->input->post('nama'),
@@ -229,8 +232,6 @@ class Users_model extends CI_Model
 
     public function detail_user($id)
     {
-        $this->db->join('user_level', 'user_level.id_level = user.level','left');
-        $this->db->join('dealer', 'dealer.id_dealer = user.id_dealer','left');
         $this->db->where('user.id_user', $id);
         return $this->db->get('user')->row_array();
     }

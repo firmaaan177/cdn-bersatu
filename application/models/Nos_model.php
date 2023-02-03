@@ -98,7 +98,7 @@ class Nos_model extends CI_Model
         $this->db->join('regional','regional.id_regional = dealer.id_regional','left');
         $this->db->join('user','user.id_user = nos.id_user','left');
         $this->db->join('user_level','user_level.id_level = user.level','left');
-        $this->db->join('panel','panel.id_panel = panel.id_panel','left');
+        $this->db->join('panel','panel.id_panel = dealer.id_panel','left');
         $this->db->group_by('nos.id_nos');
         return $this->db->get('nos')->row_array();
     }

@@ -1,6 +1,7 @@
 <div class="row">
     <div class="col-md-12">
         <button onclick="history.back()" class="btn btn-sm btn-danger"><i class="uil-angle-left"></i> Kembali</button>
+        <a href="<?= base_url(); ?>nos/import" type="button" class="btn btn-primary btn-sm"><i class="fa fa-upload mr-1"></i> Import Excel</a>
     </div>
     <div class="col-md-10 align-self-center">
         <h4><?= $nos['nama_dealer'] ?></h4>

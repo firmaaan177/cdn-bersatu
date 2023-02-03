@@ -6,7 +6,7 @@ class Dealer_model extends CI_Model
     //server side
     var $table = 'dealer'; //nama tabel dari database
     var $column_order = array(null, null, null, 'dealer.kode_dealer','dealer.nama_dealer','panel.nama_panel','regional.nama_regional','regional.status'); //field yang ada di table user
-    var $column_search = array('dealer.nama_dealer','dealer.nama_dealer','panel.nama_panel','regional.nama_regional','regional.status'); //field yang diizin untuk pencarian 
+    var $column_search = array('dealer.nama_dealer','dealer.nama_dealer','panel.nama_panel','regional.nama_regional'); //field yang diizin untuk pencarian 
     var $order = array('dealer.id_dealer' => 'desc'); // default order
 
     private function get_query()

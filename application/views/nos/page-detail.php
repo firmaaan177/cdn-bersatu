@@ -82,7 +82,7 @@
                     <table class="table table-bordered table-striped table-hover" id="datatables">
                         <thead>
                             <tr>
-                                <th colspan="2" class="bg-secondary text-white">MOT</th>
+                                <th colspan="2" class="bg-secondary text-white">PANEL</th>
                                 <th colspan="2" class="bg-success text-white">PERBAIKAN</th>
                             </tr>
                             <tr>
@@ -127,7 +127,7 @@
                                     
                                 ?>
                                 <tr>
-                                    <td width="500" class="text-start"><a href="<?= base_url() ?>nos/detail_mot/<?= encrypt_url($nos['id_nos']) ?>/<?= str_replace("&", "dan", $row['mot']); ?>"><?= $row['mot'] ?></a></td>
+                                    <td width="500" class="text-start"><a href="<?= base_url() ?>nos/detail_panel/<?= encrypt_url($nos['id_nos']) ?>/<?= $row['id_panel_sub'] ?>"><?= $row['nama_panel_sub'] ?></a></td>
                                     <td><?= number_format($total, 2) ?>%</td>
                                     <td>
                                         <?php if(!empty($row['komentar'])){ ?>

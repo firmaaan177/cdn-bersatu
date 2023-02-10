@@ -87,6 +87,22 @@ class Nos_model extends CI_Model
         return;
     }
 
+    public function getNosCompletes($id_nos='')
+    {
+        if(!empty($id_nos)){
+            $this->db->where('nos.id_nos', $id_nos);
+        }
+        $this->db->select('*, regional.id_regional, nos.id_dealer');
+        $this->db->join('nos_target','nos_target.id_nos_target = nos.id_nos_target','left');
+        $this->db->join('dealer','dealer.id_dealer = nos.id_dealer','left');
+        $this->db->join('regional','regional.id_regional = dealer.id_regional','left');
+        $this->db->join('user','user.id_user = nos.id_user','left');
+        $this->db->join('user_level','user_level.id_level = user.level','left');
+        $this->db->join('panel','panel.id_panel = dealer.id_panel','left');
+        $this->db->group_by('nos.id_nos');
+        return $this->db->get('nos')->result_array();
+    }
+
     public function getNosComplete($id_nos='')
     {
         if(!empty($id_nos)){
@@ -117,10 +133,10 @@ class Nos_model extends CI_Model
         return $this->db->get('nos_data')->result_array();
     }
 
-    public function getPicNos($id_dealer='')
+    public function getPicNos($id_regional='')
     {
-        if(!empty($id_dealer)){
-            $this->db->where('id_dealer', $id_dealer);
+        if(!empty($id_regional)){
+            $this->db->where('id_regional', $id_regional);
         }
         $this->db->where('level', SPV_NOS);
         $this->db->order_by('nama', 'desc');
@@ -135,8 +151,9 @@ class Nos_model extends CI_Model
         $this->db->select('*, nos_audit.id_dealer as id_audit_dealer');
         $this->db->join('nos_data','nos_data.id_nos_data = nos_audit.id_nos_data','left');
         $this->db->join('nos_comment','nos_comment.id_nos_audit = nos_audit.id_nos_audit','left');
+        $this->db->join('panel_sub','panel_sub.id_panel_sub = nos_data.id_panel_sub','left');
         $this->db->where_in('nos_data.id_panel_sub', $id_panel_sub);
-        $this->db->group_by('nos_data.mot');
+        $this->db->group_by('panel_sub.nama_panel_sub');
         return $this->db->get('nos_audit')->result_array();
     }
 
@@ -148,13 +165,13 @@ class Nos_model extends CI_Model
         return $this->db->get('nos_data')->result_array();
     }
 
-    public function detail_mot($id_dealer, $mot)
+    public function detail_panel($id_dealer, $id_panel_sub)
     {
         if(!empty($id_dealer)){
             $this->db->where('nos_audit.id_dealer', $id_dealer);
         }
         $this->db->join('nos_data','nos_data.id_nos_data = nos_audit.id_nos_data','left');
-        $this->db->where('nos_data.mot', $mot);
+        $this->db->where('nos_audit.id_panel_sub', $id_panel_sub);
         return $this->db->get('nos_audit')->result_array();
     }
 

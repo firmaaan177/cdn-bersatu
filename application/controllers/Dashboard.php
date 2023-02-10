@@ -27,6 +27,8 @@ class Dashboard extends CI_Controller
 			$data['title'] = 'Dashboard';
 			if($this->session->userdata('level') == 5){
 				$data['powerbi'] = $this->Powerbi_model->getPowerBi('',$this->session->userdata('id_dealer'), $this->session->userdata('id_user'));
+			}else if($this->session->userdata('level') == 2){
+				$data['powerbi'] = $this->Powerbi_model->getPowerBi($id_regional,'', '');
 			}else{
 				$data['powerbi'] = $this->Powerbi_model->getPowerBi($id_regional,$this->session->userdata('id_dealer'), $this->session->userdata('id_user'));
 			}

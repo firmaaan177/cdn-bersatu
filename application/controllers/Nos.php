@@ -221,7 +221,8 @@ class Nos extends CI_Controller
             }else{
                 $data['content'] = '404';
             }
-            $data['pic_nos'] = $this->Nos_model->getPicNos($data['nos']['id_dealer']);
+            $dealer = $this->db->where('id_dealer',$this->session->userdata('id_dealer'))->get('dealer')->row_array();
+            $data['pic_nos'] = $this->Nos_model->getPicNos($dealer['id_regional']);
             $id_sub = explode(',', $data['nos']['id_panel_sub']);
             $data['persentase'] = $this->persentaseTotalNos($id_sub);
             $data['sub_panel'] = $this->Nos_model->detail_sub_panel(decrypt_url($id_panel_sub));
@@ -287,10 +288,10 @@ class Nos extends CI_Controller
         }
     }
 
-    public function detail_mot($id_nos, $mot){
+    public function detail_panel($id_nos, $id_panel){
         if ($this->session->userdata('email')) {
-            $mot = str_replace("dan", "&", $mot);
-            $url = urldecode($mot);
+            // $mot = str_replace("dan", "&", $mot);
+            $url = $id_panel;
             $data['title'] = 'Detail';
             $data['header'] = 'temp/header';
             $data['content'] = 'nos/page-detail-mot';
@@ -300,7 +301,7 @@ class Nos extends CI_Controller
             }else{
                 $data['content'] = '404';
             }
-            $data['nos_data'] = $this->Nos_model->detail_mot($data['nos']['id_dealer'], $url);
+            $data['nos_data'] = $this->Nos_model->detail_panel($data['nos']['id_dealer'], $url);
             // echo "<pre>"; var_dump($data['nos']);die();
 
             $id_panel_sub = explode(',', $data['nos']['id_panel_sub']);

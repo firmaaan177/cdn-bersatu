@@ -24,7 +24,8 @@
         <div class="card">
             <div class="card-header">
                 <div class="col-md-12 mt-2">
-                    <h4><?= str_replace("%20"," ",$this->uri->segment('4')) ?></h4>
+                    <?php $panel = $this->db->where('id_panel_sub', $this->uri->segment('4'))->get('panel_sub')->row_array(); ?>
+                    <h4><?= $panel['nama_panel_sub'] ?></h4>
                     <p class="mb-0">Hanya menampilkan item Nos yang memiliki nilai Not Exist/Exist, Not Good</p>
                 </div>
             </div>

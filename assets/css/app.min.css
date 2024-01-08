@@ -20,6 +20,24 @@ html {
 	font-size: 14px !important;
 }
 
+.bg-bronze{
+	background-color: #CD7F32 !important;
+}
+
+.bg-silver{
+	background-color: #C0C0C0 !important;
+}
+
+.bg-gold{
+	background-color: #FFD700 !important;
+	color: #495057 !important;
+}
+
+.bg-platinum{
+	background-color: #E5E4E2 !important;
+	color: #495057 !important;
+}
+
 .navbar-header {
 	display: -webkit-box;
 	display: -ms-flexbox;

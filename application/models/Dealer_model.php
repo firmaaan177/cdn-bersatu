@@ -6,7 +6,7 @@ class Dealer_model extends CI_Model
     //server side
     var $table = 'dealer'; //nama tabel dari database
     var $column_order = array(null, null, null, 'dealer.kode_dealer','dealer.nama_dealer','panel.nama_panel','regional.nama_regional','regional.status'); //field yang ada di table user
-    var $column_search = array('dealer.nama_dealer','dealer.nama_dealer','panel.nama_panel','regional.nama_regional','regional.status'); //field yang diizin untuk pencarian 
+    var $column_search = array('dealer.nama_dealer','dealer.nama_dealer','panel.nama_panel','regional.nama_regional'); //field yang diizin untuk pencarian 
     var $order = array('dealer.id_dealer' => 'desc'); // default order
 
     private function get_query()
@@ -114,16 +114,20 @@ class Dealer_model extends CI_Model
         return;
     }
 
-    public function getdealer()
+    public function getDealer($id_regional = '')
     {
-        $this->db->order_by('id_dealer', 'asc');
+        if(!empty($id_regional)){
+            $this->db->where('id_regional', $id_regional);
+        }
+        $this->db->order_by('nama_dealer', 'asc');
         return $this->db->get('dealer')->result_array();
     }
 
-    public function getdealerbyuser(){
+    public function getDealerbyuser(){
         $this->db->join('user','user.id_dealer = dealer.id_dealer','left');
-        $this->db->where('level', 5);
-        $this->db->order_by('dealer.id_dealer', 'asc');
+        $this->db->where('level', PIC_DEALER);
+        $this->db->order_by('dealer.nama_dealer', 'asc');
+        $this->db->group_by('dealer.id_dealer');
         return $this->db->get('dealer')->result_array();
     }
 
@@ -132,6 +136,7 @@ class Dealer_model extends CI_Model
         $this->db->where('id_dealer', $id_dealer);
         return $this->db->get('dealer')->row_array();
     }
+    
 
     public function delete($id_dealer)
     {

@@ -12,6 +12,7 @@ class Users_model extends CI_Model
     {
         $this->db->select('*, user.status as status_user');
         $this->db->join('user_level','user_level.id_level = user.level','left');
+        $this->db->join('regional','regional.id_regional = user.id_regional','left');
         $this->db->join('dealer','dealer.id_dealer = user.id_dealer','left');
         $this->db->from('user');
 
@@ -70,6 +71,7 @@ class Users_model extends CI_Model
     public function simpan($images)
     {
         $data = [
+            "id_regional" => $this->input->post('id_regional'),
             "id_dealer" => $this->input->post('id_dealer'),
             "password" => md5($this->input->post('password')),
             "email" => $this->input->post('email'),
@@ -88,8 +90,8 @@ class Users_model extends CI_Model
     public function edit($images, $id_user)
     {
         $data = [
+            "id_regional" => $this->input->post('id_regional'),
             "id_dealer" => $this->input->post('id_dealer'),
-            "password" => md5($this->input->post('password')),
             "email" => $this->input->post('email'),
             "nama" => $this->input->post('nama'),
             "jk" => $this->input->post('jk'),
@@ -230,8 +232,6 @@ class Users_model extends CI_Model
 
     public function detail_user($id)
     {
-        $this->db->join('user_level', 'user_level.id_level = user.level','left');
-        $this->db->join('dealer', 'dealer.id_dealer = user.id_dealer','left');
         $this->db->where('user.id_user', $id);
         return $this->db->get('user')->row_array();
     }
@@ -248,16 +248,19 @@ class Users_model extends CI_Model
         return $this->db->get('user')->row_array();
     }
 
-    public function getuserbydealer()
+    public function getUserByRegional($id_regional)
     {
-        $this->db->order_by('nama', 'desc');
+        if(!empty($id_regional)){
+            $this->db->where('dealer.id_regional', $id_regional);
+        }
+        $this->db->join('dealer', 'dealer.id_dealer = user.id_dealer','left');
+        $this->db->order_by('user.nama', 'asc');
         return $this->db->get('user')->result_array();
     }
 
-    public function get_pic_nos()
+
+    public function getuserbydealer()
     {
-        $this->db->where('id_dealer', $this->session->userdata('id_dealer'));
-        $this->db->where('level', 6);
         $this->db->order_by('nama', 'desc');
         return $this->db->get('user')->result_array();
     }
@@ -272,6 +275,7 @@ class Users_model extends CI_Model
             return false;
         }
     }
+
     public function getCurrentUser()
     {
         $this->db->where('email', $_SESSION['email']);

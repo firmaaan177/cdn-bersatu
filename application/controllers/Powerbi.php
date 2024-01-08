@@ -10,6 +10,8 @@ class Powerbi extends CI_Controller
         $this->load->model('Powerbi_model');
         $this->load->model('Powerbi_kategori_model');
         $this->load->model('Regional_model');
+        $this->load->model('Dealer_model');
+        $this->load->model('Users_model');
     }
 
     public function index()
@@ -18,8 +20,10 @@ class Powerbi extends CI_Controller
             $data['title'] = 'Power BI';
             $data['header'] = 'temp/header';
             $data['content'] = 'powerbi/page-power-bi';
-            $data['regional'] = $this->Regional_model->getregional();
-            $data['kategori'] = $this->Powerbi_kategori_model->getpowerbi_kategori();
+            $data['regional'] = $this->Regional_model->getRegional();
+            $data['dealer'] = $this->Dealer_model->getDealer();
+            $data['user'] = $this->Users_model->list_user();
+            $data['kategori'] = $this->Powerbi_kategori_model->getKategori();
             $this->load->view('layout', $data);
         } else {
             $this->session->set_flashdata('message', 'Anda harus Login terlebih dahulu!');
@@ -41,7 +45,7 @@ class Powerbi extends CI_Controller
 				<div class='btn-group'>
 					<button type='button' class='btn btn-info btn-sm dropdown-toggle' data-bs-toggle='dropdown' aria-haspopup='true' aria-expanded='false'>Aksi <i class='mdi mdi-chevron-down'></i></button>
 					<div class='dropdown-menu'>
-						<a class='dropdown-item edit' href='#' data-bs-toggle='modal' data-bs-target='#modalEdit' id_powerbi='" . $field->id_powerbi . "'  id_regional='" . $field->id_regional . "' id_powerbi_kategori='" . $field->id_powerbi_kategori . "'  title='" . $field->title . "' tanggal='" . $field->tanggal . "' iframe='" . $field->iframe . "' tanggal='" . $field->created_date . "' sumber_data='" . $field->sumber_data . "'><i class='uil-edit-alt mr-1'></i> Edit</a>
+						<a class='dropdown-item edit' href='#' data-bs-toggle='modal' data-bs-target='#modalEdit' id_powerbi='" . $field->id_powerbi . "'  id_regional='" . $field->id_regional . "'  id_dealer='" . $field->id_dealer . "' id_user='" . $field->id_user . "' id_powerbi_kategori='" . $field->id_powerbi_kategori . "'  title='" . $field->title . "' tanggal='" . $field->tanggal . "' iframe='" . $field->iframe . "' tanggal='" . $field->created_date . "' sumber_data='" . $field->sumber_data . "'><i class='uil-edit-alt mr-1'></i> Edit</a>
 
                         <a class='dropdown-item hapus' href='#' data-id='".$field->id_powerbi."'><i class='uil-trash-alt mr-1'></i> Hapus</a>
 					</div>
@@ -64,6 +68,16 @@ class Powerbi extends CI_Controller
         );
         //output dalam format JSON
         echo json_encode($output);
+    }
+
+    public function getDealerByRegional($id_regional){
+        $data = $this->Dealer_model->getDealer($id_regional);
+        echo json_encode($data);
+    }
+
+    public function getUserByRegional($id_regional){
+        $data = $this->Users_model->getUserByRegional($id_regional);
+        echo json_encode($data);
     }
 
     public function insert()

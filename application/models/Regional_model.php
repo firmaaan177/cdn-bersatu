@@ -93,9 +93,12 @@ class Regional_model extends CI_Model
         return;
     }
 
-    public function getregional()
+    public function getRegional($id_regional='')
     {
-        $this->db->order_by('id_regional', 'asc');
+        if(!empty($id_regional)){
+            $this->db->where('id_regional', $id_regional);
+        }
+        $this->db->order_by('nama_regional', 'asc');
         return $this->db->get('regional')->result_array();
     }
 

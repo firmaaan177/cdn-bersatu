@@ -18,7 +18,7 @@ class Dealer extends CI_Controller
             $data['title'] = 'Dealer';
             $data['header'] = 'temp/header';
             $data['content'] = 'dealer/page-dealer';
-            $data['regional'] = $this->Regional_model->getregional();
+            $data['regional'] = $this->Regional_model->getRegional();
             $data['panel'] = $this->Panel_model->getpanel();
             $this->load->view('layout', $data);
         } else {

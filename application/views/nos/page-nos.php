@@ -1,7 +1,6 @@
 <div class="row">
     <div class="col-md-12 mb-3">
         <button type="button" class="btn btn-success btn-sm" data-bs-toggle="modal" data-bs-target="#modalAdd"><i class="uil-plus mr-1"></i> Tambah Data</button>
-        <a href="<?= base_url(); ?>nos/import" type="button" class="btn btn-primary btn-sm"><i class="fa fa-upload mr-1"></i> Import Excel</a>
     </div>
     <div class="col-md-6 col-xl-3">
         <div class="card">
@@ -66,6 +65,7 @@
                                 <th width="10">No.</th>
                                 <th width="10"></th>
                                 <th>Dealer</th>
+                                <th>Regional</th>
                                 <th>Nilai Nos Sebelumnya</th>
                                 <th>Status</th>
                             </tr>
@@ -80,7 +80,7 @@
 </div>
 
 <!-- ADD NOS -->
-<div id="modalAdd" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+<div id="modalAdd" class="modal fade" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">

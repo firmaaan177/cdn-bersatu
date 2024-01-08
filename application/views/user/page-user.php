@@ -24,6 +24,7 @@
 										<th>Nama</th>
 										<th>E-mail</th>
 										<th>Hak Akses</th>
+										<th>Regional</th>
 										<th>Dealer</th>
 										<th>Status</th>
 									</tr>

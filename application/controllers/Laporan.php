@@ -30,7 +30,7 @@ class Laporan extends CI_Controller
         $id_dealer = $this->input->post('id_dealer') ? $this->input->post('id_dealer') : NULL;
 
         $data = array();
-        $this->form_validation->set_rules('year','PIC Dealer','required');
+        $this->form_validation->set_rules('year','Tahun','required');
 
         if($this->form_validation->run() != false){
             $data['dealer'] = $this->Dealer_model->detail($id_dealer);
@@ -45,6 +45,7 @@ class Laporan extends CI_Controller
             $data['success'] = false;
             $data['error'] = validation_errors();
         }
+        // echo json_encode($data);
     }
 
     public function export_excel($year, $id_dealer=''){

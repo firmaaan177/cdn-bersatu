@@ -90,8 +90,23 @@
 								</div>
 							</div>
 						</div>
+
+						<div class="col-md-6 col-xl-6 mb-3" id="div_regional">
+							<div class="form-group">
+								<label for="level">Regional <span class="text-danger">*</span></label>
+								<select class="form-control select2" name="id_regional" id="id_regional" required>
+									<option value="" selected disabled>- Pilih Regional -</option>
+									<?php foreach($regional as $row) { ?>
+										<option value="<?= $row['id_regional'] ?>" <?= $row['id_regional'] == $detail['id_regional'] ? 'selected' : '' ?>><?= $row['nama_regional'] ?></option>
+									<?php } ?>
+								</select>
+								<div class="invalid-feedback">
+									Form tidak boleh kosong!
+								</div>
+							</div>
+						</div>
 						
-						<div class="col-md-6 col-xl-6 mb-3">
+						<div class="col-md-6 col-xl-6 mb-3" id="div_dealer">
 							<div class="form-group">
 								<label for="level">Dealer <span class="text-danger">*</span></label>
 								<select class="form-control select2" name="id_dealer" id="id_dealer" required>
@@ -119,7 +134,27 @@
 </form>
 
 <script>
+	$('#level').on('change', function() {
+		if(this.value == 5){
+			$('#div_dealer').show();
+			$('#div_regional').hide();
+		}else{
+			$('#div_regional').show();
+			$('#div_dealer').hide();
+		}
+	});
+</script>
+
+<script>
     $(document).ready(function() {
+		var regional = <?= $detail['id_regional'] ?>;
+		if(regional){
+			$('#div_regional').show();
+			$('#div_dealer').hide();
+		}else{
+			$('#div_dealer').show();
+			$('#div_regional').hide();
+		}
         var id_user = $('#id_user').val();
         $('#save').click(function() {
             $.ajax({

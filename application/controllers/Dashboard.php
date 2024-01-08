@@ -11,19 +11,32 @@ class Dashboard extends CI_Controller
 		$this->load->model('Users_model');
 		$this->load->model('Powerbi_model');
 		$this->load->model('Powerbi_kategori_model');
+		$this->load->model('Regional_model');
+        $this->load->model('Dealer_model');
+		
 	}
 
 	public function index()
 	{
 		if ($this->session->userdata('email')) {
-			$regional = $this->Users_model->getRegional($this->session->userdata('id_user'));
-			if(empty($regional['id_dealer']) || $regional['id_dealer'] == 0){
-				$data['title'] = 'Dashboard';
-			}else{
-				$data['title'] = 'Dashboard Regional '.$this->session->userdata('nama_regional').'';
+			$id_regional = '';
+			$id_user = '';
+			if($this->session->userdata('id_regional') != 0){
+				$id_regional = $this->session->userdata('id_regional');
 			}
-            $data['kategori'] = $this->Powerbi_kategori_model->getpowerbi_kategori();
+			$data['title'] = 'Dashboard';
+			if($this->session->userdata('level') == 5){
+				$data['powerbi'] = $this->Powerbi_model->getPowerBi('',$this->session->userdata('id_dealer'), $this->session->userdata('id_user'));
+			}else if($this->session->userdata('level') == 2){
+				$data['powerbi'] = $this->Powerbi_model->getPowerBi($id_regional,'', '');
+			}else{
+				$data['powerbi'] = $this->Powerbi_model->getPowerBi($id_regional,$this->session->userdata('id_dealer'), $this->session->userdata('id_user'));
+			}
+			// var_dump($this->db->last_query());die();
 			$data['log_login'] = $this->Dashboard_model->log_login();
+			$data['regional'] = $this->Regional_model->getRegional();
+            $data['dealer'] = $this->Dealer_model->getDealer($id_regional);
+            $data['user'] = $this->Users_model->list_user();
 			$data['header'] = 'temp/header';
 			$data['content'] = 'dashboard/dashboard';
 			$this->load->view('layout', $data);
@@ -33,20 +46,26 @@ class Dashboard extends CI_Controller
 		}
 	}
 
-	public function detail($id_powerbi_kategori){
+	public function filter(){
+        $id_dealer = $this->input->post('id_dealer') ? $this->input->post('id_dealer') : NULL;
+
+		$data['powerbi'] = $this->Powerbi_model->getPowerBiForFilter($id_dealer);
+		$data['title'] = 'Dashboard';
+		$data['success'] = true;
+		$data['msg'] = 'Berhasil!';
+		$this->load->view('dashboard/load-dashboard', $data);
+        // echo json_encode($data);
+	}
+
+	public function powerbi($id_powerbi){
 		if ($this->session->userdata('email')) {
-			$regional = $this->Users_model->getRegional($this->session->userdata('id_user'));
-			if(empty($regional['id_dealer']) || $regional['id_dealer'] == 0){
-				$data['title'] = 'Dashboard';
-			}else{
-				$data['title'] = 'Dashboard Regional '.$regional['nama_regional'].'';
-			}
+			$data['title'] = 'Dashboard';
 			$data['log_login'] = $this->Dashboard_model->log_login();
-			$data['powerbi'] = $this->Powerbi_model->getpowerbi_by_regional(decrypt_url($id_powerbi_kategori));
+			$data['powerbi'] = $this->Powerbi_model->detail(decrypt_url($id_powerbi));
 			if(!empty($data['powerbi'])){
 				$data['author'] = $this->Users_model->getuser($data['powerbi']['created_by']);
 			}
-			$data['kategori'] = $this->Powerbi_kategori_model->detail(decrypt_url($id_powerbi_kategori));
+			$data['kategori'] = $this->Powerbi_kategori_model->detail(decrypt_url($data['powerbi']['id_powerbi_kategori']));
 			$data['header'] = 'temp/header';
 			$data['content'] = 'dashboard/detail';
 			$this->load->view('layout', $data);
@@ -54,10 +73,5 @@ class Dashboard extends CI_Controller
 			$this->session->set_flashdata('message', 'Anda harus Login terlebih dahulu!');
 			redirect('auth');
 		}
-	}
-
-	public function grafik_visitor()
-	{
-		echo json_encode($this->Dashboard_model->grafik_visitor());
 	}
 }

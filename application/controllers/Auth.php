@@ -8,6 +8,7 @@ class Auth extends CI_Controller
 	{
 		parent::__construct();
 		$this->load->model('Users_model');
+		$this->load->model('Regional_model');
 	}
 
 	public function index()
@@ -112,7 +113,12 @@ class Auth extends CI_Controller
 		$password = md5($this->input->post('password'));
 		$user = $this->db->query("SELECT * FROM user where email ='$email'")->row_array();
 		$user_level = $this->db->query("SELECT * FROM user_level where id_level ='".$user['level']."'")->row_array();
-		$regional = $this->Users_model->getRegional($user['id_user']);
+		$regional_dealer = $this->Users_model->getRegional($user['id_user']);
+		if(!empty($regional_dealer)){
+			$regional = $this->Users_model->getRegional($user['id_user']);
+		}else{
+			$regional = $this->db->where('id_regional', $user['id_regional'])->get('regional')->row_array();
+		}
 		if ($user) {
 			if ($password == $user['password']) {
 				$session = [
@@ -123,9 +129,9 @@ class Auth extends CI_Controller
 					'nama_level' => $user_level['nama_level'],
 					'image' => $user['image'],
 					'status' => $user['status'],
-					'id_dealer' => $regional['id_dealer'],
-					'id_regional' => $regional['id_regional'],
-					'nama_regional' => $regional['nama_regional'],
+					'id_dealer' => !empty($regional['id_dealer']) ? $regional['id_dealer'] : '',
+					'id_regional' => !empty($regional['id_regional']) ? $regional['id_regional'] : '0',
+					'nama_regional' => !empty($regional['nama_regional']) ? $regional['nama_regional'] : '',
 				];
 				$this->session->set_userdata($session);
 				if ($user['status'] == '1') {
@@ -189,6 +195,28 @@ class Auth extends CI_Controller
 			redirect('auth/login');
 		}
 	}
+
+	public function setSessions($session = ''){
+		if($session == 0){
+			$data['id_regional'] = $this->session->set_userdata('id_regional', 0);
+			$data['nama_regional'] = $this->session->set_userdata('nama_regional', 'Semua Regional');
+		}else{
+			$regional = $this->Regional_model->detail($session);
+
+			if(!empty($regional)){
+				$data['id_regional'] = $this->session->set_userdata('id_regional', $regional['id_regional']);
+				$data['nama_regional'] = $this->session->set_userdata('nama_regional', $regional['nama_regional']);
+				$data['id_regional'] = $this->session->userdata('id_regional');
+				$data['nama_regional'] = $this->session->userdata('nama_regional');
+				$data['success'] = true;
+				$data['msg'] = 'Berhasil Ganti Regional';
+			}else{
+				$data['success'] = false;
+				$data['msg'] = 'Regional tidak ditemukan';
+			}
+		}
+        echo json_encode($data);
+	 }
 
 	public function logout()
 	{

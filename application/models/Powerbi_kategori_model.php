@@ -93,7 +93,7 @@ class Powerbi_kategori_model extends CI_Model
         return;
     }
 
-    public function getpowerbi_kategori()
+    public function getKategori()
     {
         $this->db->order_by('id_powerbi_kategori', 'asc');
         return $this->db->get('powerbi_kategori')->result_array();

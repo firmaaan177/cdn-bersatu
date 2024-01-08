@@ -3,14 +3,14 @@
         <button onclick="history.back()" class="btn btn-sm btn-danger"><i class="uil-angle-left"></i> Kembali</button>
     </div>
     <div class="col-md-10 align-self-center">
-        <h4><?= $dealer['nama_dealer'] ?></h4>
-        <p>Kacab : <?= $pic_dealer['nama'] ?> | Telp/Wa : <?= $pic_dealer['nohp'] ?></p>
+        <h4><?= $nos['nama_dealer'] ?></h4>
+        <p>Kacab : <?= $nos['nama'] ?> | Telp/Wa : <?= $nos['nohp'] ?></p>
     </div>
     <div class="col-md-2">
         <div class="card border border-primary">
             <div class="card-body text-center">
                 <h3 class="mt-0 text-primary">98%</h3>
-                <p class="card-text">Target Hasil <strong><?= $target_nos['nama_target'] ?></strong></p>
+                <p class="card-text">Target Hasil <strong><?= $nos['nama_target'] ?></strong></p>
             </div>
         </div>
         
@@ -88,9 +88,11 @@
                             </div>
                             <div class="form-group mb-3">
                                 <label for="">Foto</label>
-                                <input type="file" name="foto" id="foto" class="form-control mb-3">
+                                <input type="file" name="foto" id="foto" class="form-control">
+                                <p class="text-muted text-red mb-0 mt-3">(Kosongkan, jika tidak merubah foto)</p>
+                                <p class="text-muted text-red">Format : jpg, png, jpeg <br> Maksimal size : <b>1 MB</b></p>
                                 <?php if($edit['foto'] != 'default.jpg') { ?>
-                                    <a href="<?= base_url('upload/audit/'.$edit['foto'].''); ?>" target="_blank">Lihat Gambar</a>
+                                    <img src="<?= base_url('upload/audit/'.$edit['foto'].''); ?>" class="img-fluid img-thumbnail" alt="" style="width: 200px;object-fit: cover;height: 200px;">
                                 <?php } ?>
                             </div>
                         </div>

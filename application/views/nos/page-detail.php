@@ -1,10 +1,11 @@
 <style>
-    table{
+    table {
         border-color: #e9e9e9 !important;
     }
-    .box-comment{
+
+    .box-comment {
         padding: 15px;
-        background-color: rgba(91,115,232,.1);
+        background-color: rgba(91, 115, 232, .1);
         border-radius: 0 10px 10px 10px;
         color: #74788d;
         position: relative;
@@ -20,7 +21,7 @@
         <p class="mb-2">Kacab : <?= $nos['nama'] ?> | Telp/Wa : <?= $nos['nohp'] ?></p>
         <a href="<?= base_url(); ?>nos/report_nos" target="_blank" class="btn btn-success btn-sm">Download Excel</a>
     </div>
-    
+
     <div class="col-md-2">
         <div class="card border border-primary">
             <div class="card-body text-center">
@@ -30,10 +31,10 @@
         </div>
     </div>
 
-    <?php foreach($sub_panel as $row) {
-        if(substr($row['nama_panel_sub'], 2) == ' People'){
+    <?php foreach ($sub_panel as $row) {
+        if (substr($row['nama_panel_sub'], 2) == ' People') {
             $nilai_custom = 0.5;
-         }else{
+        } else {
             $nilai_custom = -1;
         }
         $total_exist_good = 0;
@@ -45,21 +46,20 @@
         $not_exist_good = $this->db->where('id_panel_sub', $row['id_panel_sub'])->where('nilai', $nilai_custom)->get('nos_audit')->result_array();
         $not_exist = $this->db->where('id_panel_sub', $row['id_panel_sub'])->where('nilai', 0)->get('nos_audit')->result_array();
         $audit = $this->db->where('id_panel_sub', $row['id_panel_sub'])->get('nos_audit')->result_array();
-
-        foreach($audit as $rows){
-            if($rows['nilai'] == 1){
+        foreach ($audit as $rows) {
+            if ($rows['nilai'] == 1) {
                 $total_exist_good = count($exist_good) * 1;
-            }else if($rows['nilai'] == -1){
+            } else if ($rows['nilai'] == -1) {
                 $total_not_exist_good = count($not_exist_good) * $nilai_custom;
-            }else if($rows['nilai'] == 0){
+            } else if ($rows['nilai'] == 0) {
                 $total_not_exist = count($not_exist) * 0;
-            }else{
+            } else {
                 $na = NULL;
             }
         }
-        if($audit > 0){
-            $total = ($total_exist_good + $total_not_exist_good + $total_not_exist) / count($master_nos)*100;
-        }else{
+        if (count($audit) > 0) {
+            $total = ($total_exist_good + $total_not_exist_good + $total_not_exist) / count($master_nos) * 100;
+        } else {
             $total = 0;
         }
     ?>
@@ -73,7 +73,7 @@
                 </div>
             </div>
         </div>
-	<?php } ?>
+    <?php } ?>
 
     <div class="col-md-12">
         <div class="card">
@@ -89,72 +89,74 @@
                                 <th class="text-start">Item</th>
                                 <th>Nilai</th>
                                 <th>Komentar</th>
-                                <?php if($this->session->userdata('level') != 5){ ?>
+                                <?php if ($this->session->userdata('level') != 5) { ?>
                                     <th>Approve</th>
                                 <?php } ?>
                             </tr>
                         </thead>
                         <tbody>
-                            <?php if(!empty($nos_data)) { ?>
-                                <?php foreach($nos_data as $row) { 
+                            <?php if (!empty($nos_data)) { ?>
+                                <?php foreach ($nos_data as $row) {
                                     $mot = str_replace("dan", "&", $row['mot']);
                                     $url = urldecode($mot);
                                     $master_nos = $this->db->where('mot', $url)->get('nos_data')->result_array();
 
-                                    foreach($master_nos as $rows){
+                                    foreach ($master_nos as $rows) {
                                         $exist_good = $this->db->where('id_nos_data', $rows['id_nos_data'])->where('nilai', 1)->get('nos_audit')->result_array();
                                         $not_exist_good = $this->db->where('id_nos_data', $rows['id_nos_data'])->where('nilai', $nilai_custom)->get('nos_audit')->result_array();
                                         $not_exist = $this->db->where('id_nos_data', $rows['id_nos_data'])->where('nilai', 0)->get('nos_audit')->result_array();
                                         $audit = $this->db->where('id_nos_data', $rows['id_nos_data'])->get('nos_audit')->result_array();
 
-                                        foreach($audit as $rows){
-                                            if($rows['nilai'] == 1){
+                                        foreach ($audit as $rows) {
+                                            if ($rows['nilai'] == 1) {
                                                 $total_exist_good = count($exist_good) * 1;
-                                            }else if($rows['nilai'] == -1){
+                                            } else if ($rows['nilai'] == -1) {
                                                 $total_not_exist_good = count($not_exist_good) * -1;
-                                            }else if($rows['nilai'] == 0){
+                                            } else if ($rows['nilai'] == 0) {
                                                 $total_not_exist = count($not_exist) * 0;
-                                            }else{
+                                            } else {
                                                 $na = NULL;
                                             }
                                         }
-                                        if($audit > 0){
-                                            $total = ($total_exist_good + $total_not_exist_good + $total_not_exist) / count($master_nos)*100;
-                                        }else{
+                                        if ($audit > 0) {
+                                            $total = ($total_exist_good + $total_not_exist_good + $total_not_exist) / count($master_nos) * 100;
+                                        } else {
                                             $total = 0;
                                         }
                                     }
-                                    
+
                                 ?>
-                                <tr>
-                                    <td width="500" class="text-start"><a href="<?= base_url() ?>nos/detail_panel/<?= encrypt_url($nos['id_nos']) ?>/<?= $row['id_panel_sub'] ?>"><?= $row['nama_panel_sub'] ?></a></td>
-                                    <td><?= number_format($total, 2) ?>%</td>
-                                    <td>
-                                        <?php if(!empty($row['komentar'])){ ?>
-                                            <p class="mb-0"><?= word_limiter($row['komentar'], 50) ?></p>
-                                        <?php }else{ ?>
-                                            <?php if($this->session->userdata('level') != 5){ ?>
-                                                <button class="btn btn-primary waves-effect waves-light btn-sm" data-bs-toggle="modal" data-bs-target="#modalAdd" data-mot="<?= $row['mot']?>"><i class="uil-plus mr-1"></i> Tambah Komentar</button>
-                                            <?php }else{ ?>
-                                                <span>-</span>
+                                    <tr>
+                                        <td width="500" class="text-start"><a href="<?= base_url() ?>nos/detail_panel/<?= encrypt_url($nos['id_nos']) ?>/<?= $row['id_panel_sub'] ?>"><?= $row['nama_panel_sub'] ?></a></td>
+                                        <td><?= number_format($total, 2) ?>%</td>
+                                        <td>
+                                            <?php if (!empty($row['komentar'])) { ?>
+                                                <p class="mb-0"><?= word_limiter($row['komentar'], 50) ?></p>
+                                            <?php } else { ?>
+                                                <?php if ($this->session->userdata('level') != 5) { ?>
+                                                    <button class="btn btn-primary waves-effect waves-light btn-sm" data-bs-toggle="modal" data-bs-target="#modalAdd" data-mot="<?= $row['mot'] ?>"><i class="uil-plus mr-1"></i> Tambah Komentar</button>
+                                                <?php } else { ?>
+                                                    <span>-</span>
+                                                <?php } ?>
                                             <?php } ?>
-                                        <?php } ?>
-                                    </td>
-                                    <td width="10" align="center">
-                                        <?php if($row['is_lock'] == 1){ ?>
-                                            <span style="font-size:20px;" class="fas fa-lock text-danger"></span>
-                                        <?php }else{?>
-                                            <?php if($this->session->userdata('level') != 5){ ?>
-                                                <button type="button" class="btn btn-success btn-round btn-sm lock" mot="<?= $row['mot']?>" id_dealer="<?= $row['id_audit_dealer']?>"><i class="fas fa-lock"></i></button>
-                                            <?php }else{ ?>
-                                                <span style="font-size:20px;" class="uil-times-circle text-danger"></span>
+                                        </td>
+                                        <td width="10" align="center">
+                                            <?php if ($row['is_lock'] == 1) { ?>
+                                                <span style="font-size:20px;" class="fas fa-lock text-danger"></span>
+                                            <?php } else { ?>
+                                                <?php if ($this->session->userdata('level') != 5) { ?>
+                                                    <button type="button" class="btn btn-success btn-round btn-sm lock" mot="<?= $row['mot'] ?>" id_dealer="<?= $row['id_audit_dealer'] ?>"><i class="fas fa-lock"></i></button>
+                                                <?php } else { ?>
+                                                    <span style="font-size:20px;" class="uil-times-circle text-danger"></span>
+                                                <?php } ?>
                                             <?php } ?>
-                                        <?php } ?>
-                                    </td>
-                                </tr>
+                                        </td>
+                                    </tr>
                                 <?php } ?>
-                            <?php }else { ?>
-                                <tr><td colspan="4" class="text-center">Data tidak ditemukan.</td></tr>
+                            <?php } else { ?>
+                                <tr>
+                                    <td colspan="4" class="text-center">Data tidak ditemukan.</td>
+                                </tr>
                             <?php } ?>
                         </tbody>
                     </table>
@@ -196,7 +198,7 @@
                             <button type="button" class="btn btn-primary" id="send">Kirim <i class="uil-arrow-right mr-1"></i></button>
                         </div>
                     </form>
-                    <?php foreach($komentar_nos as $row) { ?>
+                    <?php foreach ($komentar_nos as $row) { ?>
                         <div class="d-flex align-items-start mb-2">
                             <img class="d-flex me-3 rounded-circle avatar-sm" src="<?= base_url(); ?>assets/img/foto_anggota/<?= $row['image'] ?>">
                             <div class="flex-1">
@@ -265,12 +267,12 @@
             }).then((result) => {
                 if (result.isConfirmed) {
                     $.ajax({
-                        url: '<?= base_url() ?>nos/lock_nos/'+ id_dealer,
+                        url: '<?= base_url() ?>nos/lock_nos/' + id_dealer,
                         type: "POST",
-                        data : {
-                            mot : mot,
-                            id_dealer : id_dealer,
-                            is_lock : is_lock
+                        data: {
+                            mot: mot,
+                            id_dealer: id_dealer,
+                            is_lock: is_lock
                         },
                         dataType: 'json',
                         success: function(data) {
@@ -297,7 +299,7 @@
 </script>
 
 <script>
-    $('#modalAdd').on('show.bs.modal', function (event) {
+    $('#modalAdd').on('show.bs.modal', function(event) {
         var mot = $(event.relatedTarget).data('mot');
         $('#mot').val(mot)
     });
@@ -312,10 +314,10 @@
                 type: "POST",
                 data: new FormData($("#insert_comment_nos")[0]),
                 dataType: 'json',
-                processData:false, 
-                contentType:false,
-                cache:false,
-                async:false,
+                processData: false,
+                contentType: false,
+                cache: false,
+                async: false,
                 success: function(data) {
                     if (data.success == false) {
                         toastr.options.progressBar = true;
@@ -341,7 +343,7 @@
     $(document).ready(function() {
         // SAVE
         $('#send').click(function() {
-        Swal.fire({
+            Swal.fire({
                 title: 'Apakah anda yakin?',
                 text: 'Anda akan menambahkan komentar pada data nos tersebut.',
                 icon: 'warning',
@@ -352,31 +354,31 @@
                 cancelButtonText: 'Tidak'
             }).then((result) => {
                 if (result.isConfirmed) {
-                        $.ajax({
-                            url: '<?= base_url() ?>nos/add_comment_nos',
-                            type: "POST",
-                            data: $("#insert").serialize(),
-                            dataType: 'json',
-                            success: function(data) {
-                                if (data.success == false) {
-                                    toastr.options.progressBar = true;
-                                    toastr.options.positionClass = "toast-top-right";
-                                    toastr.warning(data.error);
-                                }
-                                if (data.success == true) {
-                                    Swal.fire({
-                                        icon: "success",
-                                        title: "Berhasil",
-                                        text: data.msg,
-                                    }).then((result) => {
-                                        location.reload();
-                                    });
-                                }
+                    $.ajax({
+                        url: '<?= base_url() ?>nos/add_comment_nos',
+                        type: "POST",
+                        data: $("#insert").serialize(),
+                        dataType: 'json',
+                        success: function(data) {
+                            if (data.success == false) {
+                                toastr.options.progressBar = true;
+                                toastr.options.positionClass = "toast-top-right";
+                                toastr.warning(data.error);
                             }
-                        });
-                    }
+                            if (data.success == true) {
+                                Swal.fire({
+                                    icon: "success",
+                                    title: "Berhasil",
+                                    text: data.msg,
+                                }).then((result) => {
+                                    location.reload();
+                                });
+                            }
+                        }
+                    });
+                }
 
-                });
             });
+        });
     });
 </script>

@@ -4,8 +4,8 @@ class Nos_model extends CI_Model
 {
     //server side
     var $table = 'nos'; //nama tabel dari database
-    var $column_order = array(null, null, 'dealer.nama_dealer','panel.nama_panel','regional.nama_regional','nos.hasil_sebelumnya','nos.status'); //field yang ada di table user
-    var $column_search = array('dealer.nama_dealer','panel.nama_panel','regional.nama_regional','nos.hasil_sebelumnya','nos.status'); //field yang diizin untuk pencarian 
+    var $column_order = array(null, null, 'dealer.nama_dealer', 'panel.nama_panel', 'regional.nama_regional', 'nos.hasil_sebelumnya', 'nos.status'); //field yang ada di table user
+    var $column_search = array('dealer.nama_dealer', 'panel.nama_panel', 'regional.nama_regional', 'nos.hasil_sebelumnya', 'nos.status'); //field yang diizin untuk pencarian 
     var $order = array('nos.id_nos' => 'desc'); // default order
 
     private function get_query()
@@ -13,11 +13,11 @@ class Nos_model extends CI_Model
         $this->db->select('*');
         $this->db->from('nos');
         // $this->db->join('menu','menu.id_menu = nos.id_menu','left');
-        $this->db->join('user','user.id_user = nos.id_user','left');
-        $this->db->join('dealer','dealer.id_dealer = nos.id_dealer','left');
-        $this->db->join('regional','regional.id_regional = dealer.id_regional','left');
-        $this->db->join('panel','panel.id_panel = dealer.id_panel','left');
-        $this->db->join('nos_target','nos_target.id_nos_target = nos.id_nos_target','left');
+        $this->db->join('user', 'user.id_user = nos.id_user', 'left');
+        $this->db->join('dealer', 'dealer.id_dealer = nos.id_dealer', 'left');
+        $this->db->join('regional', 'regional.id_regional = dealer.id_regional', 'left');
+        $this->db->join('panel', 'panel.id_panel = dealer.id_panel', 'left');
+        $this->db->join('nos_target', 'nos_target.id_nos_target = nos.id_nos_target', 'left');
 
         $i = 0;
 
@@ -87,55 +87,57 @@ class Nos_model extends CI_Model
         return;
     }
 
-    public function getNosCompletes($id_nos='')
+    public function getNosCompletes($id_nos = '')
     {
-        if(!empty($id_nos)){
+        if (!empty($id_nos)) {
             $this->db->where('nos.id_nos', $id_nos);
         }
         $this->db->select('*, regional.id_regional, nos.id_dealer');
-        $this->db->join('nos_target','nos_target.id_nos_target = nos.id_nos_target','left');
-        $this->db->join('dealer','dealer.id_dealer = nos.id_dealer','left');
-        $this->db->join('regional','regional.id_regional = dealer.id_regional','left');
-        $this->db->join('user','user.id_user = nos.id_user','left');
-        $this->db->join('user_level','user_level.id_level = user.level','left');
-        $this->db->join('panel','panel.id_panel = dealer.id_panel','left');
+        $this->db->join('nos_target', 'nos_target.id_nos_target = nos.id_nos_target', 'left');
+        $this->db->join('dealer', 'dealer.id_dealer = nos.id_dealer', 'left');
+        $this->db->join('regional', 'regional.id_regional = dealer.id_regional', 'left');
+        $this->db->join('user', 'user.id_user = nos.id_user', 'left');
+        $this->db->join('user_level', 'user_level.id_level = user.level', 'left');
+        $this->db->join('panel', 'panel.id_panel = dealer.id_panel', 'left');
         $this->db->group_by('nos.id_nos');
         return $this->db->get('nos')->result_array();
     }
 
-    public function getNosComplete($id_nos='')
+    public function getNosComplete($id_nos = '')
     {
-        if(!empty($id_nos)){
+        if (!empty($id_nos)) {
             $this->db->where('nos.id_nos', $id_nos);
         }
         $this->db->select('*, regional.id_regional, nos.id_dealer');
-        $this->db->join('nos_target','nos_target.id_nos_target = nos.id_nos_target','left');
-        $this->db->join('dealer','dealer.id_dealer = nos.id_dealer','left');
-        $this->db->join('regional','regional.id_regional = dealer.id_regional','left');
-        $this->db->join('user','user.id_user = nos.id_user','left');
-        $this->db->join('user_level','user_level.id_level = user.level','left');
-        $this->db->join('panel','panel.id_panel = dealer.id_panel','left');
+        $this->db->join('nos_target', 'nos_target.id_nos_target = nos.id_nos_target', 'left');
+        $this->db->join('dealer', 'dealer.id_dealer = nos.id_dealer', 'left');
+        $this->db->join('regional', 'regional.id_regional = dealer.id_regional', 'left');
+        $this->db->join('user', 'user.id_user = nos.id_user', 'left');
+        $this->db->join('user_level', 'user_level.id_level = user.level', 'left');
+        $this->db->join('panel', 'panel.id_panel = dealer.id_panel', 'left');
         $this->db->group_by('nos.id_nos');
         return $this->db->get('nos')->row_array();
     }
 
-    public function getPanelSub($id_panel_sub=''){
-        if(!empty($id_panel_sub)){
+    public function getPanelSub($id_panel_sub = '')
+    {
+        if (!empty($id_panel_sub)) {
             $this->db->where_in('id_panel_sub', $id_panel_sub);
         }
         return $this->db->get('panel_sub');
     }
 
-    public function getItemNosData($id_panel_sub){
+    public function getItemNosData($id_panel_sub)
+    {
         $this->db->where('id_panel_sub', $id_panel_sub);
-        $this->db->order_by('item','asc');
+        $this->db->order_by('item', 'asc');
         $this->db->group_by('item');
         return $this->db->get('nos_data')->result_array();
     }
 
-    public function getPicNos($id_regional='')
+    public function getPicNos($id_regional = '')
     {
-        if(!empty($id_regional)){
+        if (!empty($id_regional)) {
             $this->db->where('id_regional', $id_regional);
         }
         $this->db->where('level', SPV_NOS);
@@ -143,41 +145,43 @@ class Nos_model extends CI_Model
         return $this->db->get('user')->result_array();
     }
 
-    public function mot($id_dealer='', $id_panel_sub='')
+    public function mot($id_dealer = '', $id_panel_sub = '')
     {
-        if(!empty($id_dealer)){
+        if (!empty($id_dealer)) {
             $this->db->where('nos_audit.id_dealer', $id_dealer);
         }
         $this->db->select('*, nos_audit.id_dealer as id_audit_dealer');
-        $this->db->join('nos_data','nos_data.id_nos_data = nos_audit.id_nos_data','left');
-        $this->db->join('nos_comment','nos_comment.id_nos_audit = nos_audit.id_nos_audit','left');
-        $this->db->join('panel_sub','panel_sub.id_panel_sub = nos_data.id_panel_sub','left');
+        $this->db->join('nos_data', 'nos_data.id_nos_data = nos_audit.id_nos_data', 'left');
+        $this->db->join('nos_comment', 'nos_comment.id_nos_audit = nos_audit.id_nos_audit', 'left');
+        $this->db->join('panel_sub', 'panel_sub.id_panel_sub = nos_data.id_panel_sub', 'left');
         $this->db->where_in('nos_data.id_panel_sub', $id_panel_sub);
         $this->db->group_by('panel_sub.nama_panel_sub');
         return $this->db->get('nos_audit')->result_array();
     }
 
-    public function report_nos(){
-        $this->db->join('panel_sub','nos_data.id_panel_sub = panel_sub.id_panel_sub','left');
-        $this->db->join('nos_audit','nos_audit.id_nos_data = nos_data.id_nos_data','left');
+    public function report_nos()
+    {
+        $this->db->join('panel_sub', 'nos_data.id_panel_sub = panel_sub.id_panel_sub', 'left');
+        $this->db->join('nos_audit', 'nos_audit.id_nos_data = nos_data.id_nos_data', 'left');
         $this->db->where('nos_audit.id_dealer', $this->session->userdata('id_dealer'));
-        $this->db->order_by('nos_data.item','asc');
+        $this->db->order_by('nos_data.item', 'asc');
         return $this->db->get('nos_data')->result_array();
     }
 
     public function detail_panel($id_dealer, $id_panel_sub)
     {
-        if(!empty($id_dealer)){
+        if (!empty($id_dealer)) {
             $this->db->where('nos_audit.id_dealer', $id_dealer);
         }
-        $this->db->join('nos_data','nos_data.id_nos_data = nos_audit.id_nos_data','left');
+        $this->db->join('nos_data', 'nos_data.id_nos_data = nos_audit.id_nos_data', 'left');
         $this->db->where('nos_audit.id_panel_sub', $id_panel_sub);
+        $this->db->where('nos_audit.nilai !=', '1');
         return $this->db->get('nos_audit')->result_array();
     }
 
     public function pic_dealer()
     {
-        $this->db->join('user_level','user_level.id_level = user.level','left');
+        $this->db->join('user_level', 'user_level.id_level = user.level', 'left');
         $this->db->where('user.id_dealer', $this->session->userdata('id_dealer'));
         return $this->db->get('user')->row_array();
     }
@@ -195,45 +199,51 @@ class Nos_model extends CI_Model
         return $this->db->get('nos_target')->row_array();
     }
 
-    public function item($id_panel_sub){
+    public function item($id_panel_sub)
+    {
         $this->db->where('id_panel_sub', $id_panel_sub);
-        $this->db->order_by('item','asc');
+        $this->db->order_by('item', 'asc');
         $this->db->group_by('item');
         return $this->db->get('nos_data')->result_array();
     }
 
-    public function sub_item($item){
+    public function sub_item($item, $id_panel_sub)
+    {
         $this->db->where('item', $item);
-        $this->db->order_by('sub_item_2','asc');
+        $this->db->where('id_panel_sub', $id_panel_sub);
+        $this->db->order_by('sub_item_2', 'asc');
         $this->db->group_by('sub_item_2');
         return $this->db->get('nos_data')->result_array();
     }
 
-    public function sub_item_detail($id_nos_data){
+    public function sub_item_detail($id_nos_data)
+    {
         $this->db->where('id_nos_data', $id_nos_data);
         return $this->db->get('nos_data')->row_array();
     }
 
-    public function komentar_mot($id_dealer=''){
-        if(!empty($id_dealer)){
+    public function komentar_mot($id_dealer = '')
+    {
+        if (!empty($id_dealer)) {
             $this->db->where('nos_comment.id_dealer', $id_dealer);
         }
-        $this->db->join('nos_audit','nos_audit.id_nos_audit = nos_comment.id_nos_audit','left');
-        $this->db->join('nos_data','nos_data.id_nos_data = nos_audit.id_nos_data','left');
-        $this->db->join('user','user.id_user = nos_comment.created_by','left');
-        $this->db->join('user_level','user_level.id_level = user.level','left');
+        $this->db->join('nos_audit', 'nos_audit.id_nos_audit = nos_comment.id_nos_audit', 'left');
+        $this->db->join('nos_data', 'nos_data.id_nos_data = nos_audit.id_nos_data', 'left');
+        $this->db->join('user', 'user.id_user = nos_comment.created_by', 'left');
+        $this->db->join('user_level', 'user_level.id_level = user.level', 'left');
         $this->db->where('YEAR(due_date)', date('Y'));
         $this->db->where('komentar IS NOT NULL');
         $this->db->group_by('nos_comment.komentar');
         return $this->db->get('nos_comment')->result_array();
     }
 
-    public function komentar_nos($id_nos){
+    public function komentar_nos($id_nos)
+    {
         $this->db->select('*, comment.created_date as tgl_komentar');
-        $this->db->join('user','user.id_user = comment.created_by','left');
-        $this->db->join('user_level','user_level.id_level = user.level','left');
+        $this->db->join('user', 'user.id_user = comment.created_by', 'left');
+        $this->db->join('user_level', 'user_level.id_level = user.level', 'left');
         $this->db->where('comment.id_nos', $id_nos);
-        $this->db->order_by('comment.id_comment','desc');
+        $this->db->order_by('comment.id_comment', 'desc');
         return $this->db->get('comment')->result_array();
     }
 
@@ -241,7 +251,7 @@ class Nos_model extends CI_Model
     {
         $panel_sub = $this->db->where('id_nos_data', $this->input->post('id_nos_data'))->get('nos_data')->row_array();
         $nilai = $this->input->post('nilai');
-        if($nilai == 'empty'){
+        if ($nilai == 'empty') {
             $nilai = NULL;
         }
         $data = array(
@@ -268,7 +278,7 @@ class Nos_model extends CI_Model
     {
         $panel_sub = $this->db->where('id_nos_data', $this->input->post('id_nos_data'))->get('nos_data')->row_array();
         $nilai = $this->input->post('nilai');
-        if($nilai == 'empty'){
+        if ($nilai == 'empty') {
             $nilai = NULL;
         }
         $data = array(
@@ -296,7 +306,7 @@ class Nos_model extends CI_Model
 
     public function checkNosByDealer($id_dealer)
     {
-        if(!empty($id_dealer)){
+        if (!empty($id_dealer)) {
             $this->db->where('id_dealer', $id_dealer);
         }
         return $this->db->get('nos')->row_array();
@@ -310,7 +320,7 @@ class Nos_model extends CI_Model
 
     public function getAudit($id_nos_audit)
     {
-        if(!empty($id_nos_audit)){
+        if (!empty($id_nos_audit)) {
             $this->db->where('id_nos_audit', $id_nos_audit);
         }
         $this->db->where('id_nos_audit', $id_nos_audit);
@@ -318,8 +328,8 @@ class Nos_model extends CI_Model
         return $this->db->get('nos_audit')->row_array();
     }
 
-    public function persentaseTotalNos(){
-
+    public function persentaseTotalNos()
+    {
     }
 
     public function insert_perbaikan($images)
@@ -350,14 +360,8 @@ class Nos_model extends CI_Model
 
     public function approve()
     {
-        $check = $this->db->where('id_nos_audit', $this->input->post('id_nos_audit'))->get('nos_audit')->row_array();
-        if($check['is_perbaikan'] == 1){
-            $nilai = 1;
-        }else{
-            $nilai = $check['nilai'];
-        }
         $data = array(
-            'nilai' => $nilai,
+            'nilai' => '1',
             'status' => $this->input->post('status'),
             'is_perbaikan' => $this->input->post('is_perbaikan'),
             'edited_date' => date("Y-m-d H:i:s"),
@@ -399,7 +403,7 @@ class Nos_model extends CI_Model
         return;
     }
 
-    public function lock_nos($id_dealer='')
+    public function lock_nos($id_dealer = '')
     {
         $nos_data = $this->db->where('mot', $this->input->post('mot'))->get('nos_data')->result_array();
         $data = array();
@@ -411,7 +415,7 @@ class Nos_model extends CI_Model
                 'edited_by' => $this->session->userdata('id_user'),
             );
         }
-        if(!empty($id_dealer)){
+        if (!empty($id_dealer)) {
             $this->db->where('id_dealer', $id_dealer);
         }
         $this->db->where('YEAR(due_date)', date('Y'));
@@ -419,8 +423,9 @@ class Nos_model extends CI_Model
         return;
     }
 
-    public function nos_by_mot($id_dealer, $mot){
-        $this->db->join('nos_data','nos_data.id_nos_data = nos_audit.id_nos_data','left');
+    public function nos_by_mot($id_dealer, $mot)
+    {
+        $this->db->join('nos_data', 'nos_data.id_nos_data = nos_audit.id_nos_data', 'left');
         $this->db->where('nos_data.mot', $mot);
         $this->db->where('nos_audit.id_dealer', $id_dealer);
         return $this->db->get('nos_audit')->result_array();
@@ -470,15 +475,17 @@ class Nos_model extends CI_Model
         return;
     }
 
-    public function import_excel($data){
-		$insert = $this->db->insert_batch('tbl_data2', $data);
-		if($insert){
-			return true;
-		}
-	}
+    public function import_excel($data)
+    {
+        $insert = $this->db->insert_batch('tbl_data2', $data);
+        if ($insert) {
+            return true;
+        }
+    }
 
-    public function getData(){
-		$this->db->select('*');
-		return $this->db->get('tbl_data2')->result_array();
-	}
+    public function getData()
+    {
+        $this->db->select('*');
+        return $this->db->get('tbl_data2')->result_array();
+    }
 }
